@@ -27,6 +27,10 @@ namespace MovieReview.Controllers
         public async Task<IActionResult> GetAll()
         {
             var movies = await _service.GetAllAsync();
+            if (!movies.Any())
+            {
+                return NotFound("No movies found.");
+            }
             return Ok(movies);
         }
 
@@ -39,7 +43,7 @@ namespace MovieReview.Controllers
         public async Task<IActionResult> GetById(long id)
         {
             var movie = await _service.GetByIdAsync(id);
-            if (movie == null) return NotFound();
+            if (movie is null) return NotFound("No such movie found.");
             return Ok(movie);
         }
 
@@ -65,7 +69,7 @@ namespace MovieReview.Controllers
         public async Task<IActionResult> Update(long id, [FromBody] MovieUpdateDto dto)
         {
             var success = await _service.UpdateAsync(id, dto);
-            if (!success) return NotFound();
+            if (!success) return NotFound("Something went wrong.");
             return NoContent();
         }
 
@@ -78,7 +82,7 @@ namespace MovieReview.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             var success = await _service.DeleteAsync(id);
-            if (!success) return NotFound();
+            if (!success) return NotFound("No such movie.");
             return NoContent();
         }
     }
