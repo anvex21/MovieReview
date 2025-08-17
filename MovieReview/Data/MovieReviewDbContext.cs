@@ -35,6 +35,8 @@ namespace MovieReview.Data
         {
             base.OnModelCreating(modelBuilder); 
 
+            // manage relationships
+
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Movie)
                 .WithMany(m => m.Reviews)
@@ -54,6 +56,31 @@ namespace MovieReview.Data
                 .HasOne(r => r.User)
                 .WithMany(u => u.Ratings)
                 .HasForeignKey(r => r.UserId);
+
+            // Seed movies
+            modelBuilder.Entity<Movie>().HasData(
+                new Movie
+                {
+                    Id = 1,
+                    Title = "Inception",
+                    Description = "A mind-bending thriller about dream invasion.",
+                    ReleaseYear = 2010
+                },
+                new Movie
+                {
+                    Id = 2,
+                    Title = "The Matrix",
+                    Description = "A hacker discovers the true nature of reality.",
+                    ReleaseYear = 1999
+                },
+                new Movie
+                {
+                    Id = 3,
+                    Title = "Interstellar",
+                    Description = "A team travels through a wormhole to save humanity.",
+                    ReleaseYear = 2014
+                }
+            );
         }
 
     }
