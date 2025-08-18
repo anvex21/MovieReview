@@ -8,29 +8,34 @@ namespace MovieReview.Services
     {
         private readonly IReviewRepository _reviewRepository;
 
+        // constructor
         public ReviewService(IReviewRepository reviewRepository)
         {
             _reviewRepository = reviewRepository;
         }
 
+        // get a review by its id
         public async Task<ReviewDto> GetByIdAsync(long id)
         {
             Review review = await _reviewRepository.GetByIdAsync(id);
             return review == null ? null : MapToDto(review);
         }
 
+        // get a review by its movie id
         public async Task<IEnumerable<ReviewDto>> GetByMovieIdAsync(long movieId)
         {
             IEnumerable<Review> reviews = await _reviewRepository.GetByMovieIdAsync(movieId);
             return reviews.Select(MapToDto);
         }
 
+        // get a review by its user id
         public async Task<IEnumerable<ReviewDto>> GetByUserIdAsync(long userId)
         {
             IEnumerable<Review> reviews = await _reviewRepository.GetByUserIdAsync(userId);
             return reviews.Select(MapToDto);
         }
 
+        // add a review
         public async Task<ReviewDto> AddAsync(ReviewCreateDto dto, long userId)
         {
             Review review = new Review
@@ -45,6 +50,7 @@ namespace MovieReview.Services
             return MapToDto(review);
         }
 
+        // update a review
         public async Task UpdateAsync(long id, ReviewUpdateDto dto, long userId)
         {
             Review review = await _reviewRepository.GetByIdAsync(id);
@@ -57,6 +63,7 @@ namespace MovieReview.Services
             await _reviewRepository.UpdateAsync(review);
         }
 
+        // delete a review
         public async Task DeleteAsync(long id, long userId)
         {
             Review review = await _reviewRepository.GetByIdAsync(id);
@@ -66,6 +73,7 @@ namespace MovieReview.Services
             await _reviewRepository.DeleteAsync(review);
         }
 
+        // mapping
         private static ReviewDto MapToDto(Review review) =>
             new ReviewDto
             {

@@ -60,6 +60,31 @@ namespace MovieReview.Controllers
         }
 
         /// <summary>
+        /// Get top rated movies
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        [HttpGet("GetTopRatedMovies")]
+        public async Task<IActionResult> GetTopRatedMovies(int count)
+        {
+            IEnumerable<MovieReadDto> movies = await _service.GetTopRatedAsync(count);
+            return Ok(movies);
+        }
+
+        /// <summary>
+        /// Get all the movies released in a given year
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        [HttpGet("GetMoviesByYear/{year}")]
+        public async Task<IActionResult> GetMoviesByYear(int year)
+        {
+            IEnumerable<MovieReadDto> movies = await _service.GetByYearAsync(year);
+            if (!movies.Any()) return NotFound("No movies found for this year.");
+            return Ok(movies);
+        }
+
+        /// <summary>
         /// Add a movie
         /// </summary>
         /// <param name="dto"></param>
@@ -99,5 +124,7 @@ namespace MovieReview.Controllers
             if (!success) return NotFound("No such movie.");
             return NoContent();
         }
+
+        
     }
 }

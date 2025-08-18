@@ -9,11 +9,13 @@ namespace MovieReview.Repositories
     {
         private readonly MovieReviewDbContext _context;
 
+        // constructor
         public MovieRepository(MovieReviewDbContext context)
         {
             _context = context;
         }
 
+        // get all movies
         public async Task<IEnumerable<Movie>> GetAllAsync()
         {
             return await _context.Movies
@@ -21,6 +23,7 @@ namespace MovieReview.Repositories
                 .ToListAsync();
         }
 
+        // get all movies with parameters for pagination/filtering/sorting
         public async Task<IEnumerable<Movie>> GetAllAsync(MovieQueryDto queryParams)
         {
             IQueryable<Movie> movies = _context.Movies.AsQueryable();
@@ -59,12 +62,13 @@ namespace MovieReview.Repositories
             return await movies.ToListAsync();
         }
 
-
+        // get a movie by its id
         public async Task<Movie> GetByIdAsync(long id)
         {
             return await _context.Movies.FindAsync(id);
         }
 
+        // get a movie by its id including the reviews
         public async Task<Movie> GetByIdWithReviewsAndRatingsAsync(long id)
         {
             return await _context.Movies
@@ -72,22 +76,44 @@ namespace MovieReview.Repositories
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
+        // add a movie
         public async Task CreateAsync(Movie movie)
         {
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
         }
 
+        // update a movie
         public async Task UpdateAsync(Movie movie)
         {
             _context.Movies.Update(movie);
             await _context.SaveChangesAsync();
         }
 
+        // delete a movie
         public async Task DeleteAsync(Movie movie)
         {
             _context.Movies.Remove(movie);
             await _context.SaveChangesAsync();
+        }
+
+        // get top rated movies
+        public async Task<IEnumerable<Movie>> GetTopRatedAsync(int count)
+        {
+            return await _context.Movies
+                .Include(m => m.Reviews)
+                .OrderByDescending(m => m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        // get movies released in a certain year
+        public async Task<IEnumerable<Movie>> GetByYearAsync(int year)
+        {
+            return await _context.Movies
+                .Include(m => m.Reviews)
+                .Where(m => m.ReleaseYear == year)
+                .ToListAsync();
         }
     }
 }

@@ -8,11 +8,13 @@ namespace MovieReview.Repositories
     {
         private readonly MovieReviewDbContext _context;
 
+        // constructor
         public ReviewRepository(MovieReviewDbContext context)
         {
             _context = context;
         }
 
+        // get a review by its id
         public async Task<Review> GetByIdAsync(long id)
         {
             return await _context.Reviews
@@ -21,6 +23,7 @@ namespace MovieReview.Repositories
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        // get a review by the movie id
         public async Task<IEnumerable<Review>> GetByMovieIdAsync(long movieId)
         {
             return await _context.Reviews
@@ -29,6 +32,7 @@ namespace MovieReview.Repositories
                 .ToListAsync();
         }
 
+        // get a review by the user id
         public async Task<IEnumerable<Review>> GetByUserIdAsync(long userId)
         {
             return await _context.Reviews
@@ -37,6 +41,7 @@ namespace MovieReview.Repositories
                 .ToListAsync();
         }
 
+        // add a review
         public async Task<Review> AddAsync(Review review)
         {
             _context.Reviews.Add(review);
@@ -44,12 +49,14 @@ namespace MovieReview.Repositories
             return review;
         }
 
+        // update a review
         public async Task UpdateAsync(Review review)
         {
             _context.Reviews.Update(review);
             await _context.SaveChangesAsync();
         }
 
+        // delete a review
         public async Task DeleteAsync(Review review)
         {
             _context.Reviews.Remove(review);

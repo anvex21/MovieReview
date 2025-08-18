@@ -12,5 +12,7 @@ namespace MovieReview.Repositories
         Task UpdateAsync(Movie movie);
         Task DeleteAsync(Movie movie);
         Task<IEnumerable<Movie>> GetAllAsync(MovieQueryDto queryParams);
+        Task<IEnumerable<Movie>> GetTopRatedAsync(int count);
+        Task<IEnumerable<Movie>> GetByYearAsync(int year);
     }
 }

@@ -8,11 +8,13 @@ namespace MovieReview.Services
     {
         private readonly IMovieRepository _repository;
 
+        // constructor
         public MovieService(IMovieRepository repository)
         {
             _repository = repository;
         }
 
+        // get all movies
         public async Task<IEnumerable<MovieReadDto>> GetAllAsync()
         {
             IEnumerable<Movie> movies = await _repository.GetAllAsync();
@@ -27,6 +29,7 @@ namespace MovieReview.Services
             });
         }
 
+        // get all movies with parameters
         public async Task<IEnumerable<MovieReadDto>> GetAllAsync(MovieQueryDto queryParams)
         {
             IEnumerable<Movie> movies = await _repository.GetAllAsync(queryParams);
@@ -41,6 +44,7 @@ namespace MovieReview.Services
             });
         }
 
+        // get a movie by its id
         public async Task<MovieReadDto> GetByIdAsync(long id)
         {
             Movie movie = await _repository.GetByIdWithReviewsAndRatingsAsync(id);
@@ -57,6 +61,7 @@ namespace MovieReview.Services
             };
         }
 
+        // add a movie
         public async Task<MovieReadDto> CreateAsync(MovieCreateDto dto)
         {
             Movie movie = new Movie
@@ -78,6 +83,7 @@ namespace MovieReview.Services
             };
         }
 
+        // update a movie
         public async Task<bool> UpdateAsync(long id, MovieUpdateDto dto)
         {
             Movie movie = await _repository.GetByIdAsync(id);
@@ -91,6 +97,7 @@ namespace MovieReview.Services
             return true;
         }
 
+        // delete a movie
         public async Task<bool> DeleteAsync(long id)
         {
             Movie movie = await _repository.GetByIdAsync(id);
@@ -98,6 +105,36 @@ namespace MovieReview.Services
 
             await _repository.DeleteAsync(movie);
             return true;
+        }
+
+        // get top rated movies
+        public async Task<IEnumerable<MovieReadDto>> GetTopRatedAsync(int count)
+        {
+            IEnumerable<Movie> movies = await _repository.GetTopRatedAsync(count);
+            return movies.Select(m => new MovieReadDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                ReleaseYear = m.ReleaseYear,
+                ReviewCount = m.Reviews?.Count ?? 0,
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+            });
+        }
+
+        // get movies released in a certain year
+        public async Task<IEnumerable<MovieReadDto>> GetByYearAsync(int year)
+        {
+            IEnumerable<Movie> movies = await _repository.GetByYearAsync(year);
+            return movies.Select(m => new MovieReadDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                ReleaseYear = m.ReleaseYear,
+                ReviewCount = m.Reviews?.Count ?? 0,
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+            });
         }
     }
 }
