@@ -40,16 +40,18 @@ namespace MovieReview.Controllers
         }
 
         [HttpPost("AddReview")]
-        public async Task<ActionResult<ReviewDto>> Create(ReviewCreateDto dto)
+        public async Task<ActionResult<ReviewDto>> Create([FromBody] ReviewCreateDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             ReviewDto review = await _reviewService.AddAsync(dto, userId);
             return CreatedAtAction(nameof(GetById), new { id = review.Id }, review);
         }
 
         [HttpPut("UpdateReview/{id}")]
-        public async Task<IActionResult> Update(long id, ReviewUpdateDto dto)
+        public async Task<IActionResult> Update(long id, [FromBody] ReviewUpdateDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             await _reviewService.UpdateAsync(id, dto, userId);
             return NoContent();

@@ -67,6 +67,7 @@ namespace MovieReview.Controllers
         [HttpPost("AddMovie")]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var movie = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = movie.Id }, movie);
         }
@@ -80,8 +81,9 @@ namespace MovieReview.Controllers
         [HttpPut("UpdateMovie/{id}")]
         public async Task<IActionResult> Update(long id, [FromBody] MovieUpdateDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var success = await _service.UpdateAsync(id, dto);
-            if (!success) return NotFound("Something went wrong.");
+            if (!success) return NotFound("Not found.");
             return NoContent();
         }
 

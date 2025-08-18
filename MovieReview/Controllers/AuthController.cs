@@ -19,6 +19,7 @@ namespace MovieReview.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);     
             AuthResultDto result = await _authService.RegisterAsync(dto);
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -29,6 +30,7 @@ namespace MovieReview.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             AuthResultDto result = await _authService.LoginAsync(dto);
             if (!result.Success)
                 return Unauthorized(result.Message);
