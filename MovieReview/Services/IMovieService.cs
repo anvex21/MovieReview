@@ -9,5 +9,6 @@ namespace MovieReview.Services
         Task<MovieReadDto> CreateAsync(MovieCreateDto dto);
         Task<bool> UpdateAsync(long id, MovieUpdateDto dto);
         Task<bool> DeleteAsync(long id);
+        Task<IEnumerable<MovieReadDto>> GetAllAsync(MovieQueryDto queryParams);
     }
 }

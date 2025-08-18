@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieReview.Data;
+using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
 
 namespace MovieReview.Repositories
@@ -19,6 +20,45 @@ namespace MovieReview.Repositories
                 .Include(m=>m.Reviews)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Movie>> GetAllAsync(MovieQueryDto queryParams)
+        {
+            IQueryable<Movie> movies = _context.Movies.AsQueryable();
+
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(queryParams.Name))
+            {
+                movies = movies.Where(m => m.Title.Contains(queryParams.Name));
+            }
+
+            // Sorting
+            if (!string.IsNullOrWhiteSpace(queryParams.SortBy))
+            {
+                switch (queryParams.SortBy.ToLower())
+                {
+                    case "name":
+                        movies = queryParams.IsDescending
+                            ? movies.OrderByDescending(m => m.Title)
+                            : movies.OrderBy(m => m.Title);
+                        break;
+                    case "releasedate":
+                        movies = queryParams.IsDescending
+                            ? movies.OrderByDescending(m => m.ReleaseYear)
+                            : movies.OrderBy(m => m.ReleaseYear);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Pagination
+            movies = movies
+                .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+                .Take(queryParams.PageSize);
+
+            return await movies.ToListAsync();
+        }
+
 
         public async Task<Movie> GetByIdAsync(long id)
         {

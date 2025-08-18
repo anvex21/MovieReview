@@ -27,6 +27,20 @@ namespace MovieReview.Services
             });
         }
 
+        public async Task<IEnumerable<MovieReadDto>> GetAllAsync(MovieQueryDto queryParams)
+        {
+            IEnumerable<Movie> movies = await _repository.GetAllAsync(queryParams);
+
+            return movies.Select(m => new MovieReadDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                ReleaseYear = m.ReleaseYear,
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+            });
+        }
+
         public async Task<MovieReadDto> GetByIdAsync(long id)
         {
             Movie movie = await _repository.GetByIdWithReviewsAndRatingsAsync(id);

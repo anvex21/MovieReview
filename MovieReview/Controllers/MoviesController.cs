@@ -35,6 +35,18 @@ namespace MovieReview.Controllers
         }
 
         /// <summary>
+        /// Get all with filtering/sorting/pagination
+        /// </summary>
+        /// <param name="queryParams"></param>
+        /// <returns></returns>
+        [HttpGet("GetAllMoviesWithQuery")]
+        public async Task<IActionResult> GetAllMovies([FromQuery] MovieQueryDto queryParams)
+        {
+            IEnumerable<MovieReadDto> movies = await _service.GetAllAsync(queryParams);
+            return Ok(movies);
+        }
+
+        /// <summary>
         /// Get movie by id
         /// </summary>
         /// <param name="id"></param>
