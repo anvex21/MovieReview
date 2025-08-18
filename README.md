@@ -48,6 +48,8 @@ Edit appsettings.json to set your SQL Server connection string:
 
 3. **Apply migrations and update database**
 
+4. **Run the application with F5**
+
 ---
 
 ## Authentication
