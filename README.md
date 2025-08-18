@@ -77,7 +77,7 @@ Content-Type: application/json
 }
 ```
 
-The response returns a **JWT token.** Include this token as Authorization: Bearer <token> for all protected endpoints.
+The response of the login request returns a **JWT token.** Include this token as Authorization: Bearer <token> for all protected endpoints.
 
 ---
 
