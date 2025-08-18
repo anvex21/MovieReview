@@ -41,7 +41,7 @@ namespace MovieReview.Repositories
                             ? movies.OrderByDescending(m => m.Title)
                             : movies.OrderBy(m => m.Title);
                         break;
-                    case "releasedate":
+                    case "releaseyear":
                         movies = queryParams.IsDescending
                             ? movies.OrderByDescending(m => m.ReleaseYear)
                             : movies.OrderBy(m => m.ReleaseYear);
