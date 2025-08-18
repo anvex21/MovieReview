@@ -69,6 +69,8 @@ builder.Services.AddIdentity<User, IdentityRole<long>>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 // Add JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");

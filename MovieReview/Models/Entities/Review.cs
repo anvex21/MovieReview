@@ -16,6 +16,12 @@ namespace MovieReview.Models.Entities
         public string Content { get; set; }
 
         /// <summary>
+        /// Rating (1-10 for example)
+        /// </summary>
+        [Range(1, 10)]
+        public int Rating { get; set; }
+
+        /// <summary>
         /// MovieId (FK)
         /// </summary>
         public long MovieId { get; set; }

@@ -26,17 +26,11 @@ namespace MovieReview.Data
         /// </summary>
         public DbSet<Review> Reviews { get; set; }
 
-        /// <summary>
-        /// Ratings
-        /// </summary>
-        public DbSet<Rating> Ratings { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); 
+            base.OnModelCreating(modelBuilder);
 
-            // manage relationships
-
+            // Relationships
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Movie)
                 .WithMany(m => m.Reviews)
@@ -45,16 +39,6 @@ namespace MovieReview.Data
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
-                .HasForeignKey(r => r.UserId);
-
-            modelBuilder.Entity<Rating>()
-                .HasOne(r => r.Movie)
-                .WithMany(m => m.Ratings)
-                .HasForeignKey(r => r.MovieId);
-
-            modelBuilder.Entity<Rating>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Ratings)
                 .HasForeignKey(r => r.UserId);
 
             // Seed movies
@@ -81,7 +65,82 @@ namespace MovieReview.Data
                     ReleaseYear = 2014
                 }
             );
-        }
 
+            // Seed data for reviews
+            modelBuilder.Entity<Review>().HasData(
+                new Review
+                {
+                    Id = 1,
+                    Content = "Amazing movie, loved every second!",
+                    Rating = 9,
+                    MovieId = 1,
+                    UserId = 1
+                },
+                new Review
+                {
+                    Id = 2,
+                    Content = "Not bad, but could have been better.",
+                    Rating = 6,
+                    MovieId = 2,
+                    UserId = 2
+                },
+                new Review
+                {
+                    Id = 3,
+                    Content = "Great cast and visuals, weak story.",
+                    Rating = 7,
+                    MovieId = 3,
+                    UserId = 3
+                },
+                new Review
+                {
+                    Id = 4,
+                    Content = "Revolutionary sci-fi, a true classic.",
+                    Rating = 10,
+                    MovieId = 2, 
+                    UserId = 1
+                },
+                new Review
+                {
+                    Id = 5,
+                    Content = "Great action but the sequels ruined it a bit.",
+                    Rating = 8,
+                    MovieId = 2,
+                    UserId = 2
+                },
+                new Review
+                {
+                    Id = 6,
+                    Content = "Never gets old, still one of my favorites.",
+                    Rating = 9,
+                    MovieId = 2,
+                    UserId = 3
+                },
+                new Review
+                {
+                    Id = 7,
+                    Content = "Visually stunning and emotional.",
+                    Rating = 9,
+                    MovieId = 3, 
+                    UserId = 1
+                },
+                new Review
+                {
+                    Id = 8,
+                    Content = "The science parts were too heavy but still good.",
+                    Rating = 7,
+                    MovieId = 3,
+                    UserId = 2
+                },
+                new Review
+                {
+                    Id = 9,
+                    Content = "Masterpiece, Nolan at his best.",
+                    Rating = 10,
+                    MovieId = 3,
+                    UserId = 3
+                }
+            );
+        }
     }
 }

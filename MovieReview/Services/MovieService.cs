@@ -23,7 +23,7 @@ namespace MovieReview.Services
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Ratings?.Any() == true ? m.Ratings.Average(r => r.Value) : 0
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
             });
         }
 
@@ -39,7 +39,7 @@ namespace MovieReview.Services
                 Description = movie.Description,
                 ReleaseYear = movie.ReleaseYear,
                 ReviewCount = movie.Reviews?.Count ?? 0,
-                AverageRating = movie.Ratings?.Any() == true ? movie.Ratings.Average(r => r.Value) : 0
+                AverageRating = movie.Reviews.Any() ? movie.Reviews.Average(r => r.Rating) : 0
             };
         }
 

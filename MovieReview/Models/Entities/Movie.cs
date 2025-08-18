@@ -31,10 +31,5 @@ namespace MovieReview.Models.Entities
         /// Reviews
         /// </summary>
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-
-        /// <summary>
-        /// Ratings
-        /// </summary>
-        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

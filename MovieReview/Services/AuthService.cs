@@ -70,7 +70,7 @@ namespace MovieReview.Services
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
+                expires: DateTime.UtcNow.AddHours(24),
                 signingCredentials: creds
             );
 
