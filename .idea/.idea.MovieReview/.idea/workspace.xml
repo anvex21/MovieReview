@@ -9,18 +9,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b28b2c8e-7114-46d2-aea5-e9a8003de884" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MovieReview/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MovieReview/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MovieReview/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieReview/wwwroot/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieReview/wwwroot/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Models/DTOs/ReviewDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Models/DTOs/ReviewDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Repositories/MovieRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Repositories/MovieRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Repositories/ReviewRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Repositories/ReviewRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Services/MovieService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Services/MovieService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieReview/Services/ReviewService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview/Services/ReviewService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MovieReview/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MovieReview/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieReview.Tests/MovieControllerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview.Tests/MovieControllerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieReview.Tests/MovieReview.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview.Tests/MovieReview.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieReview.Tests/MovieServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview.Tests/MovieServiceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieReview.Tests/ReviewServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieReview.Tests/ReviewServiceTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,16 +31,16 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/anvex21/MovieReview.git",
-    "accountId": "0bd628dd-0c74-4e5a-9534-c634a5ec9514"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/anvex21/MovieReview.git&quot;,
+    &quot;accountId&quot;: &quot;0bd628dd-0c74-4e5a-9534-c634a5ec9514&quot;
   }
-}]]></component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -59,7 +52,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     ".NET Launch Settings Profile.Unnamed.executor": "Run",
-    "git-widget-placeholder": "featutre/add-frontend",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -67,7 +60,7 @@
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected=".NET Launch Settings Profile.Unnamed">
     <configuration name="Unnamed" type="LaunchSettings" factoryName=".NET Launch Settings Profile" nameIsGenerated="true">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/MovieReview/MovieReview.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net10.0" />
@@ -84,6 +77,9 @@
         <option name="Build" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue=".NET Launch Settings Profile.Unnamed" />
+    </list>
   </component>
   <component name="TaskManager">
     <servers />
