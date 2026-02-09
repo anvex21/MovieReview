@@ -1,48 +1,39 @@
-# Build results
+## --- .NET / C# Specifics ---
 bin/
 obj/
-out/
-
-# Visual Studio / Rider / VS Code
-.vs/
-.vscode/
-.idea/
-*.suo
 *.user
 *.userosscache
 *.sln.docstates
-*.rsuser
-*.sln.iml
 
-# OS files
+## --- JetBrains Rider / IntelliJ Specifics ---
+.idea/
+*.iml
+*.iws
+*.ipr
+# Ignore Rider's local project settings
+.idea/.idea.*/
+.idea/contentModel.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+
+## --- OS Specifics ---
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-
-# NuGet
-*.nupkg
-*.snupkg
-.nuget/
-
-# Test results
-TestResults/
-
-# ASP.NET Core
-appsettings.Development.json
-appsettings.Production.json
-
-# Entity Framework
-Migrations/
-
-# Secrets
-secrets.json
-*.pfx
-*.pem
-
-# Misc
+## --- Database & Local Secrets ---
 *.db
-*.sqlite
-*.swp
-*.tmp
+*.db-shm
+*.db-wal
+appsettings.Development.json
+# Uncomment the line above if you want to keep local connection strings 
+# (like your MySQL password) out of GitHub.
+
+## --- Frontend (React/Vite) Specifics ---
+node_modules/
+dist/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
