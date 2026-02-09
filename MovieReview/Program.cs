@@ -7,6 +7,7 @@ using MovieReview.Data;
 using MovieReview.Models.Entities;
 using MovieReview.Repositories;
 using MovieReview.Services;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,9 +51,11 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-// Add DbContext
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
 builder.Services.AddDbContext<MovieReviewDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseMySql(connectionString, serverVersion));
 
 // Add Identity
 builder.Services.AddIdentity<User, IdentityRole<long>>(options =>

@@ -1,0 +1,48 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.sln.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Test results
+TestResults/
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.Production.json
+
+# Entity Framework
+Migrations/
+
+# Secrets
+secrets.json
+*.pfx
+*.pem
+
+# Misc
+*.db
+*.sqlite
+*.swp
+*.tmp

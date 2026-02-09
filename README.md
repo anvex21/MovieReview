@@ -25,7 +25,7 @@ It supports secure user authentication, movie and review CRUD operations, and fi
 
 ## Requirements
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)  
-- SQL Server (Express or full)  
+- MySQL 8.0+ (or MariaDB / compatible server)  
 - IDE: Visual Studio 2022, Rider, or VS Code with C# extension
 
 ---
@@ -39,14 +39,21 @@ cd MovieReview
 ```
 
 2. **Update connection string**
-Edit appsettings.json to set your SQL Server connection string:
-```bash
+Edit appsettings.json to set your MySQL connection string:
+```json
 "ConnectionStrings": {
-    "DefaultConnection": "Your-connection-string-here"
+  "DefaultConnection": "Server=localhost;Port=3306;Database=MovieReview;User=root;Password=yourpassword;"
 }
 ```
 
-3. **Apply migrations and update database**
+3. **Apply migrations and update database**  
+   The project is configured for MySQL. Old SQL Server migrations were removed. Create and apply the initial migration:
+   ```bash
+   cd MovieReview
+   dotnet ef migrations add InitialMySql
+   dotnet ef database update
+   ```
+   Ensure MySQL is running and the connection string in `appsettings.json` is correct. If you use a different MySQL server version, change the `MySqlServerVersion` in `Program.cs` (e.g. `new Version(8, 0, 21)` to match your server).
 
 4. **Run the application with F5**
 
