@@ -1,4 +1,4 @@
-﻿using MovieReview.Models.DTOs;
+using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
 using MovieReview.Repositories;
 
@@ -81,7 +81,8 @@ namespace MovieReview.Services
                 Content = review.Content,
                 Rating = review.Rating,
                 MovieId = review.MovieId,
-                UserId = review.UserId
+                UserId = review.UserId,
+                UserName = review.User?.UserName
             };
     }
 }

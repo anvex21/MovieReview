@@ -1,4 +1,4 @@
-﻿namespace MovieReview.Models.DTOs
+namespace MovieReview.Models.DTOs
 {
     public class ReviewDto
     {
@@ -22,5 +22,9 @@
         /// UserId (FK)
         /// </summary>
         public long UserId { get; set; }
+        /// <summary>
+        /// Username of the reviewer
+        /// </summary>
+        public string UserName { get; set; }
     }
 }

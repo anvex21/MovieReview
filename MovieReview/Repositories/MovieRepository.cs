@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MovieReview.Data;
 using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
@@ -26,7 +26,7 @@ namespace MovieReview.Repositories
         // get all movies with parameters for pagination/filtering/sorting
         public async Task<IEnumerable<Movie>> GetAllAsync(MovieQueryDto queryParams)
         {
-            IQueryable<Movie> movies = _context.Movies.AsQueryable();
+            IQueryable<Movie> movies = _context.Movies.Include(m => m.Reviews).AsQueryable();
 
             // Filtering
             if (!string.IsNullOrWhiteSpace(queryParams.Name))
