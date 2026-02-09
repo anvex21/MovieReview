@@ -57,6 +57,16 @@ Edit appsettings.json to set your MySQL connection string:
 
 4. **Run the application with F5**
 
+5. **Frontend (optional)**  
+   The API and the web UI are served together. When you run the project, the app (login, movies, reviews) is available at the same URL as the API, e.g. **https://localhost:7178** or **http://localhost:5240** — open that URL in the browser for the frontend; Swagger remains at `/swagger`.  
+   To rebuild the frontend CSS (Tailwind), from the `MovieReview` project folder run:
+   ```bash
+   cd MovieReview
+   npm install
+   npm run build:css
+   ```
+   Use `npm run watch:css` while changing styles or markup.
+
 ---
 
 ## Authentication
