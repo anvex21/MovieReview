@@ -14,6 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -106,8 +115,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); 
+app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Serve static frontend (Tailwind UI)
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.MapControllers();
+// SPA fallback so client-side routing works
+app.MapFallbackToFile("index.html");
+
 app.Run();

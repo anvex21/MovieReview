@@ -1,4 +1,4 @@
-﻿using MovieReview.Models.DTOs;
+using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
 using MovieReview.Repositories;
 
@@ -40,7 +40,8 @@ namespace MovieReview.Services
                 Title = m.Title,
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+                ReviewCount = m.Reviews?.Count ?? 0,
+                AverageRating = m.Reviews != null && m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
             });
         }
 
