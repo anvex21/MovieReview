@@ -47,7 +47,7 @@ public class ExceptionMiddleware
                 Details = _env.IsDevelopment() ? ex.StackTrace : null
             };
 
-            var json = JsonSerializer.Serialize(response);
+            var json = JsonSerializer.Serialize(response, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             await context.Response.WriteAsync(json);
         }
     }

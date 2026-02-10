@@ -47,7 +47,8 @@
     } catch (_) {}
 
     if (!res.ok) {
-      const err = new Error(data?.message || res.statusText || 'Request failed');
+      const message = (data && (data.message ?? data.Message)) || res.statusText || 'Something went wrong. Please try again.';
+      const err = new Error(message);
       err.status = res.status;
       err.data = data;
       throw err;
@@ -140,7 +141,7 @@
           loginError.classList.remove('hidden');
         }
       } catch (err) {
-        loginError.textContent = err.data?.message || err.message || 'Login failed';
+        loginError.textContent = (err.data && (err.data.Message ?? err.data.message)) || err.message || 'Login failed';
         loginError.classList.remove('hidden');
       }
     });
@@ -166,7 +167,7 @@
           registerError.classList.remove('hidden');
         }
       } catch (err) {
-        registerError.textContent = err.data?.message || err.message || 'Registration failed';
+        registerError.textContent = (err.data && (err.data.Message ?? err.data.message)) || err.message || 'Registration failed';
         registerError.classList.remove('hidden');
       }
     });
@@ -257,7 +258,7 @@
         return;
       }
       if (errEl) {
-        errEl.textContent = err.data?.message || err.message || 'Failed to load movies';
+        errEl.textContent = (err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to load movies';
         errEl.classList.remove('hidden');
       }
     }
@@ -310,7 +311,7 @@
         loadMovies();
       } catch (err) {
         if (addMovieError) {
-          addMovieError.textContent = err.data?.message || err.message || 'Failed to add movie';
+          addMovieError.textContent = (err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to add movie';
           addMovieError.classList.remove('hidden');
         }
       }
@@ -355,7 +356,7 @@
         loadMovieAndReviews(id);
       } catch (err) {
         if (editMovieError) {
-          editMovieError.textContent = err.data?.message || err.message || 'Failed to update movie';
+          editMovieError.textContent = (err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to update movie';
           editMovieError.classList.remove('hidden');
         }
       }
@@ -466,7 +467,7 @@
         await api(`api/Movies/DeleteMovie/${currentMovieId}`, { method: 'DELETE' });
         setHash('movies');
       } catch (err) {
-        alert(err.data?.message || err.message || 'Failed to delete movie');
+        alert((err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to delete movie');
       }
     });
   }
@@ -480,7 +481,7 @@
       await api(`api/Reviews/DeleteReview/${reviewId}`, { method: 'DELETE' });
       loadMovieAndReviews(currentMovieId);
     } catch (err) {
-      alert(err.data?.message || err.message || 'Failed to delete review');
+      alert((err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to delete review');
     }
   });
 
@@ -500,7 +501,7 @@
         formReview.reset();
         loadMovieAndReviews(movieId);
       } catch (err) {
-        alert(err.data?.message || err.message || 'Failed to add review');
+        alert((err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to add review');
       }
     });
   }
