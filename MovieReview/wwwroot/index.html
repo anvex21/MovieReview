@@ -29,11 +29,40 @@
             },
             surface: {
               950: '#020617',
-              900: '#020617',
-              800: '#020617',
-              700: '#020617',
-              600: '#020617',
-              500: '#020617',
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+              600: '#475569',
+              500: '#64748b',
+            },
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+            'scale-in': 'scaleIn 0.3s ease-out forwards',
+            'glow-pulse': 'glowPulse 2s ease-in-out infinite',
+            'shimmer': 'shimmer 1.5s infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            scaleIn: {
+              '0%': { opacity: '0', transform: 'scale(0.95)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+            glowPulse: {
+              '0%, 100%': { boxShadow: '0 0 20px rgba(56,189,248,0.4)' },
+              '50%': { boxShadow: '0 0 35px rgba(56,189,248,0.6)' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
             },
           },
         },
@@ -54,6 +83,169 @@
     .glass-button:focus-visible {
       outline: none;
       box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.7), 0 0 0 8px rgba(56, 189, 248, 0.18);
+    }
+
+    /* Enhanced movie card styles */
+    .movie-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .movie-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .movie-card:hover::before {
+      opacity: 1;
+    }
+    .movie-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(56,189,248,0.15);
+      border-color: rgba(56,189,248,0.4);
+    }
+
+    /* Star rating display */
+    .star-rating {
+      display: inline-flex;
+      gap: 2px;
+    }
+    .star {
+      color: #475569;
+      font-size: 0.875rem;
+    }
+    .star.filled {
+      color: #fbbf24;
+      text-shadow: 0 0 8px rgba(251,191,36,0.5);
+    }
+
+    /* Skeleton loading shimmer */
+    .skeleton {
+      background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 0.75rem;
+    }
+
+    /* Modal backdrop animation */
+    .modal-backdrop {
+      transition: opacity 0.25s ease, backdrop-filter 0.25s ease;
+    }
+    .modal-backdrop.hidden {
+      opacity: 0;
+      backdrop-filter: blur(0);
+      pointer-events: none;
+    }
+    .modal-backdrop:not(.hidden) {
+      opacity: 1;
+    }
+
+    /* Modal content animation */
+    .modal-content {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    }
+    .modal-backdrop.hidden .modal-content {
+      transform: scale(0.95) translateY(10px);
+      opacity: 0;
+    }
+    .modal-backdrop:not(.hidden) .modal-content {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* Enhanced button hover effects */
+    .btn-primary {
+      transition: all 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Glass card hover glow */
+    .glass-card {
+      position: relative;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+    .glass-card::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.3), transparent, rgba(139,92,246,0.2));
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .glass-card:hover::after {
+      opacity: 1;
+    }
+
+    /* Empty state icon */
+    .empty-icon {
+      font-size: 3rem;
+      opacity: 0.3;
+      margin-bottom: 1rem;
+    }
+
+    /* Review card styles */
+    .review-card {
+      transition: all 0.2s ease;
+    }
+    .review-card:hover {
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.3);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(56, 189, 248, 0.5);
+    }
+
+    /* Animation delay utilities */
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+
+    /* Screen reader only */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
     }
   </style>
 </head>
@@ -147,8 +339,8 @@
       </section>
 
       <!-- Modal: Add movie -->
-      <div id="modal-add-movie" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl" aria-modal="true">
-        <div class="w-full max-w-md rounded-3xl bg-slate-900/40 border border-white/15 shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
+      <div id="modal-add-movie" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl" aria-modal="true">
+        <div class="modal-content w-full max-w-md rounded-3xl bg-slate-900/60 border border-white/15 shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
           <div class="p-6 border-b border-white/10">
             <h2 class="font-display font-semibold text-xl text-white tracking-tight">Add movie</h2>
           </div>
@@ -170,10 +362,10 @@
             </div>
             <p id="add-movie-error" class="text-xs text-rose-300 hidden"></p>
             <div class="flex gap-3 pt-2">
-              <button type="button" id="modal-add-movie-cancel" class="glass-button flex-1 rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-sm py-2.5 hover:bg-white/10 hover:border-white/25 transition-colors">
+              <button type="button" id="modal-add-movie-cancel" class="glass-button flex-1 rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-sm py-2.5 hover:bg-white/10 hover:border-white/25 transition-all hover:-translate-y-0.5">
                 Cancel
               </button>
-              <button type="submit" class="glass-button flex-1 rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold text-sm py-2.5 shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+              <button type="submit" class="btn-primary glass-button flex-1 rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold text-sm py-2.5 shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
                 Add movie
               </button>
             </div>
@@ -182,8 +374,8 @@
       </div>
 
       <!-- Modal: Edit movie -->
-      <div id="modal-edit-movie" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl" aria-modal="true">
-        <div class="w-full max-w-md rounded-3xl bg-slate-900/40 border border-white/15 shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
+      <div id="modal-edit-movie" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl" aria-modal="true">
+        <div class="modal-content w-full max-w-md rounded-3xl bg-slate-900/60 border border-white/15 shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
           <div class="p-6 border-b border-white/10">
             <h2 class="font-display font-semibold text-xl text-white tracking-tight">Edit movie</h2>
           </div>
@@ -206,10 +398,10 @@
             </div>
             <p id="edit-movie-error" class="text-xs text-rose-300 hidden"></p>
             <div class="flex gap-3 pt-2">
-              <button type="button" id="modal-edit-movie-cancel" class="glass-button flex-1 rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-sm py-2.5 hover:bg-white/10 hover:border-white/25 transition-colors">
+              <button type="button" id="modal-edit-movie-cancel" class="glass-button flex-1 rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-sm py-2.5 hover:bg-white/10 hover:border-white/25 transition-all hover:-translate-y-0.5">
                 Cancel
               </button>
-              <button type="submit" class="glass-button flex-1 rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold text-sm py-2.5 shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+              <button type="submit" class="btn-primary glass-button flex-1 rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold text-sm py-2.5 shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
                 Save changes
               </button>
             </div>
@@ -223,14 +415,16 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div class="flex flex-wrap items-center gap-3">
               <h1 class="font-display font-semibold text-2xl text-white tracking-tight">Movies</h1>
-              <button type="button" id="btn-add-movie" class="glass-button inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-medium px-4 py-2 text-xs tracking-wide shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
-                <span class="text-base leading-none">＋</span>
+              <button type="button" id="btn-add-movie" class="btn-primary glass-button inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-medium px-4 py-2 text-xs tracking-wide shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                 <span>Add movie</span>
               </button>
             </div>
             <div class="flex flex-wrap gap-3">
+              <label class="sr-only" for="movies-search">Search movies</label>
               <input id="movies-search" type="text" placeholder="Search by name…"
                 class="glass-input rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2 text-sm w-52 transition-colors" />
+              <label class="sr-only" for="movies-sort">Sort by</label>
               <select id="movies-sort"
                 class="glass-select rounded-2xl bg-white/5 border border-white/12 text-slate-50 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2 text-sm transition-colors">
                 <option value="name">Title</option>
@@ -242,7 +436,11 @@
           <div id="movies-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Filled by JS -->
           </div>
-          <p id="movies-empty" class="text-slate-400 text-center py-8 text-sm hidden">No movies found.</p>
+          <div id="movies-empty" class="text-center py-16 hidden">
+            <div class="empty-icon">🎬</div>
+            <p class="text-slate-400 text-base mb-2">No movies found</p>
+            <p class="text-slate-500 text-sm">Try adjusting your search or add a new movie to get started.</p>
+          </div>
           <p id="movies-error" class="text-rose-300 text-center py-4 text-sm hidden"></p>
         </div>
       </section>
@@ -250,43 +448,60 @@
       <!-- Movie detail + reviews -->
       <section id="page-movie" data-page class="min-h-screen pt-14">
         <div class="max-w-4xl mx-auto px-4 py-8">
-          <a href="#/movies" class="inline-flex items-center text-slate-300/80 hover:text-brand-300 mb-6 text-sm transition-colors">← Back to movies</a>
-          <article id="movie-detail" class="rounded-3xl bg-slate-900/40 border border-white/12 overflow-hidden shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
+          <a href="#/movies" class="inline-flex items-center gap-1.5 text-slate-300/80 hover:text-brand-300 mb-6 text-sm transition-colors group">
+            <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back to movies
+          </a>
+          <article id="movie-detail" class="glass-card rounded-3xl overflow-hidden shadow-[0_26px_80px_rgba(15,23,42,0.95)]">
             <div class="p-6 sm:p-8">
-              <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
-                <h1 id="movie-title" class="font-display font-semibold text-2xl text-white tracking-tight"></h1>
+              <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+                <h1 id="movie-title" class="font-display font-semibold text-2xl sm:text-3xl text-white tracking-tight"></h1>
                 <div class="flex gap-2">
-                  <button type="button" id="btn-edit-movie" class="glass-button rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-xs font-medium px-3.5 py-1.5 hover:bg-white/10 hover:border-white/25 transition-colors">
-                    Edit
+                  <button type="button" id="btn-edit-movie" class="glass-button rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-xs font-medium px-3.5 py-1.5 hover:bg-white/10 hover:border-white/25 hover:-translate-y-0.5 transition-all">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                      Edit
+                    </span>
                   </button>
-                  <button type="button" id="btn-delete-movie" class="glass-button rounded-2xl bg-rose-600/85 hover:bg-rose-500 text-slate-50 text-xs font-medium px-3.5 py-1.5 shadow-[0_18px_40px_rgba(248,113,113,0.7)] transition-colors">
-                    Delete
+                  <button type="button" id="btn-delete-movie" class="glass-button rounded-2xl bg-rose-600/85 hover:bg-rose-500 text-slate-50 text-xs font-medium px-3.5 py-1.5 shadow-[0_18px_40px_rgba(248,113,113,0.5)] hover:-translate-y-0.5 transition-all">
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      Delete
+                    </span>
                   </button>
                 </div>
               </div>
               <p id="movie-meta" class="text-slate-300/80 text-sm mb-4"></p>
-              <p id="movie-description" class="text-slate-100/90 leading-relaxed text-sm"></p>
-              <div id="movie-stats" class="mt-4 flex gap-4 text-sm text-slate-300/80"></div>
+              <p id="movie-description" class="text-slate-100/90 leading-relaxed"></p>
+              <div id="movie-stats" class="mt-5 flex flex-wrap gap-4 text-sm"></div>
             </div>
-            <div class="border-t border-white/10 p-6 sm:p-8">
-              <h2 class="font-display font-semibold text-lg text-white mb-4">Reviews</h2>
+            <div class="border-t border-white/10 p-6 sm:p-8 bg-slate-900/30">
+              <h2 class="font-display font-semibold text-lg text-white mb-5 flex items-center gap-2">
+                <svg class="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                Reviews
+              </h2>
               <form id="form-review" class="mb-6 flex flex-col sm:flex-row gap-3">
-                <input id="review-content" type="text" placeholder="Your review…" maxlength="500" required
+                <label class="sr-only" for="review-content">Your review</label>
+                <input id="review-content" type="text" placeholder="Share your thoughts about this movie…" maxlength="500" required
                   class="glass-input flex-1 rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" />
+                <label class="sr-only" for="review-rating">Rating</label>
                 <select id="review-rating"
                   class="glass-select rounded-2xl bg-white/5 border border-white/12 text-slate-50 focus:border-brand-400/90 px-4 py-2.5 text-sm outline-none transition-colors">
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
-                  <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
-                  <option value="9">9</option><option value="10" selected>10</option>
+                  <option value="1">⭐ 1</option><option value="2">⭐ 2</option><option value="3">⭐ 3</option><option value="4">⭐ 4</option>
+                  <option value="5">⭐ 5</option><option value="6">⭐ 6</option><option value="7">⭐ 7</option><option value="8">⭐ 8</option>
+                  <option value="9">⭐ 9</option><option value="10" selected>⭐ 10</option>
                 </select>
-                <button type="submit" class="glass-button rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold px-4 py-2.5 text-sm whitespace-nowrap shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+                <button type="submit" class="btn-primary glass-button rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold px-5 py-2.5 text-sm whitespace-nowrap shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
                   Add review
                 </button>
               </form>
               <div id="reviews-list" class="space-y-4">
                 <!-- Filled by JS -->
               </div>
-              <p id="reviews-empty" class="text-slate-400 text-sm hidden">No reviews yet.</p>
+              <div id="reviews-empty" class="text-center py-8 hidden">
+                <div class="text-3xl opacity-30 mb-2">💭</div>
+                <p class="text-slate-400 text-sm">No reviews yet. Be the first to share your thoughts!</p>
+              </div>
             </div>
           </article>
         </div>
