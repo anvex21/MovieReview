@@ -15,24 +15,25 @@
           },
           colors: {
             brand: {
-              50: '#fef7ee',
-              100: '#fdedd6',
-              200: '#f9d7ad',
-              300: '#f5b978',
-              400: '#ef9242',
-              500: '#eb751a',
-              600: '#dc5a10',
-              700: '#b64310',
-              800: '#913615',
-              900: '#752f14',
-              950: '#3f1608',
+              50: '#ecfeff',
+              100: '#cffafe',
+              200: '#a5f3fc',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+              950: '#082f49',
             },
             surface: {
-              900: '#0f0f0f',
-              800: '#18181b',
-              700: '#27272a',
-              600: '#3f3f46',
-              500: '#52525b',
+              950: '#020617',
+              900: '#020617',
+              800: '#020617',
+              700: '#020617',
+              600: '#020617',
+              500: '#020617',
             },
           },
         },
@@ -46,17 +47,35 @@
     [data-page]:not([data-active]) { display: none !important; }
     [data-page][data-active].page-auth { display: flex !important; }
     [data-page][data-active]:not(.page-auth) { display: block !important; }
+
+    /* Subtle liquid glass glow on focusable elements */
+    .glass-input:focus-visible,
+    .glass-select:focus-visible,
+    .glass-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.7), 0 0 0 8px rgba(56, 189, 248, 0.18);
+    }
   </style>
 </head>
-<body class="min-h-screen bg-surface-900 text-zinc-100 font-sans antialiased">
-  <div id="app">
+<body class="min-h-screen bg-slate-950 text-slate-50 font-sans antialiased relative overflow-x-hidden">
+  <!-- Background liquid gradient orbs -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-40 -left-32 h-80 w-80 rounded-full bg-gradient-to-br from-brand-400/40 via-sky-500/40 to-fuchsia-500/40 blur-3xl"></div>
+    <div class="absolute top-40 -right-32 h-96 w-96 rounded-full bg-gradient-to-bl from-purple-500/30 via-brand-500/40 to-emerald-400/30 blur-3xl"></div>
+    <div class="absolute bottom-[-8rem] left-1/2 -translate-x-1/2 h-80 w-[32rem] rounded-[999px] bg-gradient-to-r from-brand-500/25 via-cyan-400/25 to-indigo-500/25 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.16),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(15,23,42,0.9),_rgba(15,23,42,1))] mix-blend-soft-light"></div>
+  </div>
+
+  <div id="app" class="relative">
     <!-- Nav: only when logged in -->
-    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-surface-700/80 bg-surface-900/90 backdrop-blur-md hidden">
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-900/30 backdrop-blur-2xl shadow-[0_18px_60px_rgba(15,23,42,0.85)] hidden">
       <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <a href="#/movies" class="font-display font-semibold text-xl text-brand-400">MovieReview</a>
-        <div class="flex items-center gap-4">
-          <a href="#/movies" class="text-zinc-400 hover:text-white transition">Movies</a>
-          <button id="btn-logout" type="button" class="text-zinc-400 hover:text-brand-400 transition">Sign out</button>
+        <a href="#/movies" class="font-display font-semibold text-xl text-brand-300 tracking-tight drop-shadow-[0_0_18px_rgba(56,189,248,0.7)]">MovieReview</a>
+        <div class="flex items-center gap-4 text-sm">
+          <a href="#/movies" class="text-slate-300/80 hover:text-white transition-colors">Movies</a>
+          <button id="btn-logout" type="button" class="glass-button inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-slate-50/90 text-xs font-medium tracking-wide shadow-[0_0_22px_rgba(56,189,248,0.28)] hover:bg-white/10 hover:border-brand-300/60 hover:text-white transition-colors">
+            Sign out
+          </button>
         </div>
       </div>
     </nav>
@@ -64,25 +83,26 @@
     <main class="pt-0">
       <!-- Auth: Login -->
       <section id="page-login" data-page data-active class="page-auth min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-md">
+        <div class="w-full max-w-md relative">
+          <div class="absolute inset-0 -z-10 rounded-[28px] bg-gradient-to-br from-brand-400/35 via-cyan-400/20 to-purple-500/25 blur-3xl opacity-80"></div>
           <div class="text-center mb-8">
-            <h1 class="font-display font-bold text-3xl text-white mb-2">Welcome back</h1>
-            <p class="text-zinc-500">Sign in with your account</p>
+            <h1 class="font-display font-semibold text-3xl text-white mb-2 tracking-tight">Welcome back</h1>
+            <p class="text-slate-300/80 text-sm">Sign in to rate and review your favorite movies.</p>
           </div>
-          <form id="form-login" class="space-y-5 rounded-2xl bg-surface-800/80 border border-surface-600/50 p-6 shadow-xl">
+          <form id="form-login" class="space-y-5 rounded-[24px] bg-slate-900/40 border border-white/12 px-6 py-6 shadow-[0_22px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
             <div>
-              <label for="login-username" class="block text-sm font-medium text-zinc-400 mb-1.5">Username</label>
+              <label for="login-username" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Username</label>
               <input id="login-username" name="username" type="text" required autocomplete="username"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2.5 transition outline-none" placeholder="Your username" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" placeholder="Your username" />
             </div>
             <div>
-              <label for="login-password" class="block text-sm font-medium text-zinc-400 mb-1.5">Password</label>
+              <label for="login-password" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Password</label>
               <input id="login-password" name="password" type="password" required autocomplete="current-password"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2.5 transition outline-none" placeholder="••••••••" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" placeholder="••••••••" />
             </div>
-            <p id="login-error" class="text-sm text-red-400 hidden"></p>
-            <button type="submit" class="w-full rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 transition">
-              Sign in
+            <p id="login-error" class="text-xs text-rose-300 hidden"></p>
+            <button type="submit" class="glass-button w-full rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold py-2.5 text-sm tracking-wide shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+              Continue
             </button>
           </form>
           <p class="mt-4 text-center text-zinc-500 text-sm">
@@ -93,29 +113,30 @@
 
       <!-- Auth: Register -->
       <section id="page-register" data-page class="page-auth min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-md">
+        <div class="w-full max-w-md relative">
+          <div class="absolute inset-0 -z-10 rounded-[28px] bg-gradient-to-br from-brand-400/35 via-emerald-400/20 to-purple-500/25 blur-3xl opacity-80"></div>
           <div class="text-center mb-8">
-            <h1 class="font-display font-bold text-3xl text-white mb-2">Create account</h1>
-            <p class="text-zinc-500">Join to rate and review movies</p>
+            <h1 class="font-display font-semibold text-3xl text-white mb-2 tracking-tight">Create account</h1>
+            <p class="text-slate-300/80 text-sm">Join to rate and review movies with a liquid glass experience.</p>
           </div>
-          <form id="form-register" class="space-y-5 rounded-2xl bg-surface-800/80 border border-surface-600/50 p-6 shadow-xl">
+          <form id="form-register" class="space-y-5 rounded-[24px] bg-slate-900/40 border border-white/12 px-6 py-6 shadow-[0_22px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
             <div>
-              <label for="reg-username" class="block text-sm font-medium text-zinc-400 mb-1.5">Username</label>
+              <label for="reg-username" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Username</label>
               <input id="reg-username" name="username" type="text" required minlength="3" maxlength="50" autocomplete="username"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2.5 transition outline-none" placeholder="3–50 characters" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" placeholder="3–50 characters" />
             </div>
             <div>
-              <label for="reg-email" class="block text-sm font-medium text-zinc-400 mb-1.5">Email</label>
+              <label for="reg-email" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Email</label>
               <input id="reg-email" name="email" type="email" required autocomplete="email"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2.5 transition outline-none" placeholder="you@example.com" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" placeholder="you@example.com" />
             </div>
             <div>
-              <label for="reg-password" class="block text-sm font-medium text-zinc-400 mb-1.5">Password</label>
+              <label for="reg-password" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Password</label>
               <input id="reg-password" name="password" type="password" required minlength="6" autocomplete="new-password"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2.5 transition outline-none" placeholder="Min 6 characters" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" placeholder="Min 6 characters" />
             </div>
-            <p id="register-error" class="text-sm text-red-400 hidden"></p>
-            <button type="submit" class="w-full rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 transition">
+            <p id="register-error" class="text-xs text-rose-300 hidden"></p>
+            <button type="submit" class="glass-button w-full rounded-2xl bg-gradient-to-r from-brand-400 via-emerald-400 to-indigo-400 hover:from-brand-500 hover:via-emerald-500 hover:to-indigo-500 text-slate-950 font-semibold py-2.5 text-sm tracking-wide shadow-[0_18px_45px_rgba(34,197,235,0.65)] transition-all">
               Create account
             </button>
           </form>
@@ -126,63 +147,71 @@
       </section>
 
       <!-- Modal: Add movie -->
-      <div id="modal-add-movie" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" aria-modal="true">
-        <div class="w-full max-w-md rounded-2xl bg-surface-800 border border-surface-600 shadow-xl">
-          <div class="p-6 border-b border-surface-600">
-            <h2 class="font-display font-bold text-xl text-white">Add movie</h2>
+      <div id="modal-add-movie" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl" aria-modal="true">
+        <div class="w-full max-w-md rounded-3xl bg-slate-900/40 border border-white/15 shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
+          <div class="p-6 border-b border-white/10">
+            <h2 class="font-display font-semibold text-xl text-white tracking-tight">Add movie</h2>
           </div>
           <form id="form-add-movie" class="p-6 space-y-4">
             <div>
-              <label for="add-movie-title" class="block text-sm font-medium text-zinc-400 mb-1">Title</label>
+              <label for="add-movie-title" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Title</label>
               <input id="add-movie-title" name="title" type="text" required maxlength="100" placeholder="Movie title"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" />
             </div>
             <div>
-              <label for="add-movie-description" class="block text-sm font-medium text-zinc-400 mb-1">Description</label>
+              <label for="add-movie-description" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Description</label>
               <textarea id="add-movie-description" name="description" required maxlength="500" rows="3" placeholder="Short description"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none resize-none"></textarea>
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm outline-none resize-none transition-colors"></textarea>
             </div>
             <div>
-              <label for="add-movie-year" class="block text-sm font-medium text-zinc-400 mb-1">Release year</label>
+              <label for="add-movie-year" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Release year</label>
               <input id="add-movie-year" name="releaseYear" type="number" required min="1800" max="2100" value="2024" placeholder="2024"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" />
             </div>
-            <p id="add-movie-error" class="text-sm text-red-400 hidden"></p>
+            <p id="add-movie-error" class="text-xs text-rose-300 hidden"></p>
             <div class="flex gap-3 pt-2">
-              <button type="button" id="modal-add-movie-cancel" class="flex-1 rounded-lg bg-surface-600 hover:bg-surface-500 text-white py-2 transition">Cancel</button>
-              <button type="submit" class="flex-1 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2 transition">Add movie</button>
+              <button type="button" id="modal-add-movie-cancel" class="glass-button flex-1 rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-sm py-2.5 hover:bg-white/10 hover:border-white/25 transition-colors">
+                Cancel
+              </button>
+              <button type="submit" class="glass-button flex-1 rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold text-sm py-2.5 shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+                Add movie
+              </button>
             </div>
           </form>
         </div>
       </div>
 
       <!-- Modal: Edit movie -->
-      <div id="modal-edit-movie" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" aria-modal="true">
-        <div class="w-full max-w-md rounded-2xl bg-surface-800 border border-surface-600 shadow-xl">
-          <div class="p-6 border-b border-surface-600">
-            <h2 class="font-display font-bold text-xl text-white">Edit movie</h2>
+      <div id="modal-edit-movie" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xl" aria-modal="true">
+        <div class="w-full max-w-md rounded-3xl bg-slate-900/40 border border-white/15 shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
+          <div class="p-6 border-b border-white/10">
+            <h2 class="font-display font-semibold text-xl text-white tracking-tight">Edit movie</h2>
           </div>
           <form id="form-edit-movie" class="p-6 space-y-4">
             <input id="edit-movie-id" type="hidden" />
             <div>
-              <label for="edit-movie-title" class="block text-sm font-medium text-zinc-400 mb-1">Title</label>
+              <label for="edit-movie-title" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Title</label>
               <input id="edit-movie-title" name="title" type="text" required maxlength="100" placeholder="Movie title"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" />
             </div>
             <div>
-              <label for="edit-movie-description" class="block text-sm font-medium text-zinc-400 mb-1">Description</label>
+              <label for="edit-movie-description" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Description</label>
               <textarea id="edit-movie-description" name="description" required maxlength="500" rows="3" placeholder="Short description"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none resize-none"></textarea>
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm outline-none resize-none transition-colors"></textarea>
             </div>
             <div>
-              <label for="edit-movie-year" class="block text-sm font-medium text-zinc-400 mb-1">Release year</label>
+              <label for="edit-movie-year" class="block text-xs font-medium text-slate-200/80 mb-1.5 tracking-wide uppercase">Release year</label>
               <input id="edit-movie-year" name="releaseYear" type="number" required min="1800" max="2100" placeholder="2024"
-                class="w-full rounded-lg bg-surface-700 border border-surface-600 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none" />
+                class="glass-input w-full rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" />
             </div>
-            <p id="edit-movie-error" class="text-sm text-red-400 hidden"></p>
+            <p id="edit-movie-error" class="text-xs text-rose-300 hidden"></p>
             <div class="flex gap-3 pt-2">
-              <button type="button" id="modal-edit-movie-cancel" class="flex-1 rounded-lg bg-surface-600 hover:bg-surface-500 text-white py-2 transition">Cancel</button>
-              <button type="submit" class="flex-1 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2 transition">Save</button>
+              <button type="button" id="modal-edit-movie-cancel" class="glass-button flex-1 rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-sm py-2.5 hover:bg-white/10 hover:border-white/25 transition-colors">
+                Cancel
+              </button>
+              <button type="submit" class="glass-button flex-1 rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold text-sm py-2.5 shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+                Save changes
+              </button>
             </div>
           </form>
         </div>
@@ -193,62 +222,71 @@
         <div class="max-w-6xl mx-auto px-4 py-8">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div class="flex flex-wrap items-center gap-3">
-              <h1 class="font-display font-bold text-2xl text-white">Movies</h1>
-              <button type="button" id="btn-add-movie" class="rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-medium px-4 py-2 transition text-sm">Add movie</button>
+              <h1 class="font-display font-semibold text-2xl text-white tracking-tight">Movies</h1>
+              <button type="button" id="btn-add-movie" class="glass-button inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-medium px-4 py-2 text-xs tracking-wide shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+                <span class="text-base leading-none">＋</span>
+                <span>Add movie</span>
+              </button>
             </div>
             <div class="flex flex-wrap gap-3">
               <input id="movies-search" type="text" placeholder="Search by name…"
-                class="rounded-lg bg-surface-800 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 w-48 outline-none transition" />
+                class="glass-input rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2 text-sm w-52 transition-colors" />
               <select id="movies-sort"
-                class="rounded-lg bg-surface-800 border border-surface-600 text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none transition">
+                class="glass-select rounded-2xl bg-white/5 border border-white/12 text-slate-50 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2 text-sm transition-colors">
                 <option value="name">Title</option>
                 <option value="releaseyear">Year</option>
               </select>
-              <button id="movies-sort-dir" type="button" class="rounded-lg bg-surface-700 hover:bg-surface-600 border border-surface-600 px-4 py-2 transition" title="Toggle order">↓</button>
+              <button id="movies-sort-dir" type="button" class="glass-button rounded-2xl bg-white/5 border border-white/12 text-slate-50/90 px-3.5 py-2 text-xs hover:bg-white/10 hover:border-brand-300/50 transition-colors" title="Toggle order">↓</button>
             </div>
           </div>
           <div id="movies-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Filled by JS -->
           </div>
-          <p id="movies-empty" class="text-zinc-500 text-center py-8 hidden">No movies found.</p>
-          <p id="movies-error" class="text-red-400 text-center py-4 hidden"></p>
+          <p id="movies-empty" class="text-slate-400 text-center py-8 text-sm hidden">No movies found.</p>
+          <p id="movies-error" class="text-rose-300 text-center py-4 text-sm hidden"></p>
         </div>
       </section>
 
       <!-- Movie detail + reviews -->
       <section id="page-movie" data-page class="min-h-screen pt-14">
         <div class="max-w-4xl mx-auto px-4 py-8">
-          <a href="#/movies" class="inline-flex items-center text-zinc-400 hover:text-brand-400 mb-6 transition">← Back to movies</a>
-          <article id="movie-detail" class="rounded-2xl bg-surface-800/80 border border-surface-600/50 overflow-hidden">
+          <a href="#/movies" class="inline-flex items-center text-slate-300/80 hover:text-brand-300 mb-6 text-sm transition-colors">← Back to movies</a>
+          <article id="movie-detail" class="rounded-3xl bg-slate-900/40 border border-white/12 overflow-hidden shadow-[0_26px_80px_rgba(15,23,42,0.95)] backdrop-blur-2xl">
             <div class="p-6 sm:p-8">
               <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
-                <h1 id="movie-title" class="font-display font-bold text-2xl text-white"></h1>
+                <h1 id="movie-title" class="font-display font-semibold text-2xl text-white tracking-tight"></h1>
                 <div class="flex gap-2">
-                  <button type="button" id="btn-edit-movie" class="rounded-lg bg-surface-600 hover:bg-surface-500 text-white text-sm font-medium px-3 py-1.5 transition">Edit</button>
-                  <button type="button" id="btn-delete-movie" class="rounded-lg bg-red-600/80 hover:bg-red-600 text-white text-sm font-medium px-3 py-1.5 transition">Delete</button>
+                  <button type="button" id="btn-edit-movie" class="glass-button rounded-2xl border border-white/15 bg-white/5 text-slate-50/90 text-xs font-medium px-3.5 py-1.5 hover:bg-white/10 hover:border-white/25 transition-colors">
+                    Edit
+                  </button>
+                  <button type="button" id="btn-delete-movie" class="glass-button rounded-2xl bg-rose-600/85 hover:bg-rose-500 text-slate-50 text-xs font-medium px-3.5 py-1.5 shadow-[0_18px_40px_rgba(248,113,113,0.7)] transition-colors">
+                    Delete
+                  </button>
                 </div>
               </div>
-              <p id="movie-meta" class="text-zinc-500 text-sm mb-4"></p>
-              <p id="movie-description" class="text-zinc-300 leading-relaxed"></p>
-              <div id="movie-stats" class="mt-4 flex gap-4 text-sm text-zinc-400"></div>
+              <p id="movie-meta" class="text-slate-300/80 text-sm mb-4"></p>
+              <p id="movie-description" class="text-slate-100/90 leading-relaxed text-sm"></p>
+              <div id="movie-stats" class="mt-4 flex gap-4 text-sm text-slate-300/80"></div>
             </div>
-            <div class="border-t border-surface-600/50 p-6 sm:p-8">
+            <div class="border-t border-white/10 p-6 sm:p-8">
               <h2 class="font-display font-semibold text-lg text-white mb-4">Reviews</h2>
               <form id="form-review" class="mb-6 flex flex-col sm:flex-row gap-3">
                 <input id="review-content" type="text" placeholder="Your review…" maxlength="500" required
-                  class="flex-1 rounded-lg bg-surface-700 border border-surface-600 text-white placeholder-zinc-500 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 px-4 py-2 outline-none transition" />
+                  class="glass-input flex-1 rounded-2xl bg-white/5 border border-white/12 text-slate-50 placeholder-slate-400/70 focus:border-brand-400/90 focus:ring-1 focus:ring-brand-400/70 px-4 py-2.5 text-sm transition-colors" />
                 <select id="review-rating"
-                  class="rounded-lg bg-surface-700 border border-surface-600 text-white focus:border-brand-500 px-4 py-2 outline-none transition">
+                  class="glass-select rounded-2xl bg-white/5 border border-white/12 text-slate-50 focus:border-brand-400/90 px-4 py-2.5 text-sm outline-none transition-colors">
                   <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
                   <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
                   <option value="9">9</option><option value="10" selected>10</option>
                 </select>
-                <button type="submit" class="rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 transition whitespace-nowrap">Add review</button>
+                <button type="submit" class="glass-button rounded-2xl bg-gradient-to-r from-brand-400 via-sky-400 to-indigo-400 hover:from-brand-500 hover:via-sky-500 hover:to-indigo-500 text-slate-950 font-semibold px-4 py-2.5 text-sm whitespace-nowrap shadow-[0_18px_45px_rgba(56,189,248,0.6)] transition-all">
+                  Add review
+                </button>
               </form>
               <div id="reviews-list" class="space-y-4">
                 <!-- Filled by JS -->
               </div>
-              <p id="reviews-empty" class="text-zinc-500 text-sm hidden">No reviews yet.</p>
+              <p id="reviews-empty" class="text-slate-400 text-sm hidden">No reviews yet.</p>
             </div>
           </article>
         </div>
