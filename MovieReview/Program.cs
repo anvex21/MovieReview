@@ -83,6 +83,7 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddHttpClient<IExternalMovieService, ExternalMovieService>();
 
 // Add JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
