@@ -1,8 +1,8 @@
 # MovieReview
 
 ## Description
-MovieReview is a fully-featured backend ASP.NET Core Web API designed to manage movies and reviews.  
-It supports secure user authentication, movie and review CRUD operations, and filtering, sorting, and pagination for movies.
+MovieReview is an ASP.NET Core–based movie review application that combines a RESTful Web API with a built-in frontend.
+The backend handles secure user authentication, movie and review CRUD operations, and advanced querying (filtering, sorting, pagination), while the frontend (served from wwwroot) lets users browse movies and manage their reviews directly in the browser.
 
 ---
 
@@ -55,17 +55,22 @@ Edit appsettings.json to set your MySQL connection string:
    ```
    Ensure MySQL is running and the connection string in `appsettings.json` is correct. If you use a different MySQL server version, change the `MySqlServerVersion` in `Program.cs` (e.g. `new Version(8, 0, 21)` to match your server).
 
-4. **Run the application with F5**
 
-5. **Frontend (optional)**  
-   The API and the web UI are served together. When you run the project, the app (login, movies, reviews) is available at the same URL as the API, e.g. **https://localhost:7178** or **http://localhost:5240** — open that URL in the browser for the frontend; Swagger remains at `/swagger`.  
-   To rebuild the frontend CSS (Tailwind), from the `MovieReview` project folder run:
-   ```bash
-   cd MovieReview
-   npm install
-   npm run build:css
-   ```
-   Use `npm run watch:css` while changing styles or markup.
+
+4. **Running the application**
+
+    Using Visual Studio / Rider: Press F5 or click the Start button.
+
+    Using the .NET CLI: Run the following command from the MovieReview directory:
+    ```bash
+    dotnet run --project MovieReview/MovieReview.csproj --launch-profile https
+    ```
+
+    Available endpoints:
+    - Frontend UI: https://localhost:7178 (Opens by default)
+    - API Documentation (Swagger): https://localhost:7178/swagger
+
+    Note: The CSS is pre-built, but if you modify the styles, you can rebuild them using npm run build:css inside the MovieReview folder.
 
 ---
 
@@ -96,6 +101,20 @@ Content-Type: application/json
 
 The response of the login request returns a **JWT token.** Include this token as Authorization: Bearer <token> for all protected endpoints.
 
+---
+
+## Testing
+The solution includes a dedicated test project (`MovieReview.Tests`) to ensure API reliability and core logic integrity.
+
+### **Running Tests**
+* **Using Visual Studio / Rider:** 
+    1. Open the **Unit Tests** window.
+    2. Click **Run All** (or press `Ctrl+U, L`).
+* **Using the .NET CLI:**
+    Run the following command from the root directory:
+    ```bash
+    dotnet test
+    ```
 ---
 
 ## Notes
