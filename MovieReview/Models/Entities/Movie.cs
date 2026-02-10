@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace MovieReview.Models.Entities
@@ -14,13 +14,13 @@ namespace MovieReview.Models.Entities
         /// Movie title
         /// </summary>
         [Required, MaxLength(100)]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
         [MaxLength(500)]
-        public string Description { get; set; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// Release Year

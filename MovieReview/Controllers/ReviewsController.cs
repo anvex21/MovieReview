@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieReview.Models.DTOs;
@@ -22,7 +22,7 @@ namespace MovieReview.Controllers
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult<ReviewDto>> GetById(long id)
         {
-            ReviewDto review = await _reviewService.GetByIdAsync(id);
+            ReviewDto? review = await _reviewService.GetByIdAsync(id);
             if (review == null) return NotFound();
             return Ok(review);
         }
@@ -43,7 +43,7 @@ namespace MovieReview.Controllers
         public async Task<ActionResult<ReviewDto>> Create([FromBody] ReviewCreateDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("NameIdentifier claim missing"));
             ReviewDto review = await _reviewService.AddAsync(dto, userId);
             return CreatedAtAction(nameof(GetById), new { id = review.Id }, review);
         }
@@ -52,7 +52,7 @@ namespace MovieReview.Controllers
         public async Task<IActionResult> Update(long id, [FromBody] ReviewUpdateDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("NameIdentifier claim missing"));
             await _reviewService.UpdateAsync(id, dto, userId);
             return NoContent();
         }
@@ -60,7 +60,7 @@ namespace MovieReview.Controllers
         [HttpDelete("DeleteReview/{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("NameIdentifier claim missing"));
             await _reviewService.DeleteAsync(id, userId);
             return NoContent();
         }

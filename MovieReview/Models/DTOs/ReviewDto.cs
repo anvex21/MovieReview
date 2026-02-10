@@ -9,7 +9,7 @@ namespace MovieReview.Models.DTOs
         /// <summary>
         /// Content
         /// </summary>
-        public string Content { get; set; }
+        public required string Content { get; set; }
         /// <summary>
         /// Rating (FK)
         /// </summary>
@@ -25,6 +25,6 @@ namespace MovieReview.Models.DTOs
         /// <summary>
         /// Username of the reviewer
         /// </summary>
-        public string UserName { get; set; }
+        public required string UserName { get; set; }
     }
 }

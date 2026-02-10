@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieReview.Models.DTOs
 {
@@ -9,7 +9,7 @@ namespace MovieReview.Models.DTOs
         /// </summary>
         [Required]
         [StringLength(500)]
-        public string Content { get; set; }
+        public required string Content { get; set; }
         /// <summary>
         /// Rating
         /// </summary>

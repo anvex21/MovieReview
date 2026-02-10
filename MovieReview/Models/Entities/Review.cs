@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieReview.Models.Entities
 {
@@ -13,7 +13,7 @@ namespace MovieReview.Models.Entities
         /// Review Content
         /// </summary>
         [Required, MaxLength(2000)]
-        public string Content { get; set; }
+        public required string Content { get; set; }
 
         /// <summary>
         /// Rating (1-10 for example)
@@ -29,7 +29,7 @@ namespace MovieReview.Models.Entities
         /// <summary>
         /// Navigation property (MOVIE)
         /// </summary>
-        public Movie Movie { get; set; }
+        public Movie? Movie { get; set; }
 
         /// <summary>
         /// UserId (FK)
@@ -39,6 +39,6 @@ namespace MovieReview.Models.Entities
         /// <summary>
         /// Navigation property (USER)
         /// </summary>
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

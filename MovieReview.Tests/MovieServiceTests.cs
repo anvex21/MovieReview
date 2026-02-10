@@ -31,7 +31,7 @@ namespace MovieReview.Tests
         {
             var movies = new List<Movie>
             {
-                new Movie { Id = 1, Title = "A", Description = "D1", ReleaseYear = 2020, Reviews = new List<Review> { new Review { Rating = 8 }, new Review { Rating = 10 } } }
+                new Movie { Id = 1, Title = "A", Description = "D1", ReleaseYear = 2020, Reviews = new List<Review> { new Review { Content = "Good", Rating = 8 }, new Review { Content = "Great", Rating = 10 } } }
             };
             _repoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(movies);
 
@@ -61,7 +61,7 @@ namespace MovieReview.Tests
         [Test]
         public async Task GetByIdAsync_ReturnsDto_WhenMovieExists()
         {
-            var movie = new Movie { Id = 1, Title = "Inception", Description = "Desc", ReleaseYear = 2010, Reviews = new List<Review> { new Review { Rating = 9 } } };
+            var movie = new Movie { Id = 1, Title = "Inception", Description = "Desc", ReleaseYear = 2010, Reviews = new List<Review> { new Review { Content = "Good", Rating = 9 } } };
             _repoMock.Setup(r => r.GetByIdWithReviewsAndRatingsAsync(1)).ReturnsAsync(movie);
 
             var result = await _service.GetByIdAsync(1);
@@ -160,7 +160,7 @@ namespace MovieReview.Tests
         [Test]
         public async Task GetTopRatedAsync_ReturnsMappedDtos()
         {
-            var movies = new List<Movie> { new Movie { Id = 1, Title = "A", Description = "D", ReleaseYear = 2020, Reviews = new List<Review> { new Review { Rating = 10 } } } };
+            var movies = new List<Movie> { new Movie { Id = 1, Title = "A", Description = "D", ReleaseYear = 2020, Reviews = new List<Review> { new Review { Content = "Great", Rating = 10 } } } };
             _repoMock.Setup(r => r.GetTopRatedAsync(5)).ReturnsAsync(movies);
 
             var result = (await _service.GetTopRatedAsync(5)).ToList();

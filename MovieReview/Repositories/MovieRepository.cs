@@ -63,13 +63,13 @@ namespace MovieReview.Repositories
         }
 
         // get a movie by its id
-        public async Task<Movie> GetByIdAsync(long id)
+        public async Task<Movie?> GetByIdAsync(long id)
         {
             return await _context.Movies.FindAsync(id);
         }
 
         // get a movie by its id including the reviews
-        public async Task<Movie> GetByIdWithReviewsAndRatingsAsync(long id)
+        public async Task<Movie?> GetByIdWithReviewsAndRatingsAsync(long id)
         {
             return await _context.Movies
                 .Include(m => m.Reviews)

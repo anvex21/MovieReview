@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
@@ -56,7 +56,7 @@ namespace MovieReview.Services
         private string GenerateJwtToken(User user)
         {
             IConfigurationSection jwtSettings = _configuration.GetSection("Jwt");
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException("Jwt:Key is not configured")));
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             Claim[] claims = new[]

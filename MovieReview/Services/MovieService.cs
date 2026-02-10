@@ -27,7 +27,7 @@ namespace MovieReview.Services
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                AverageRating = (m.Reviews != null && m.Reviews.Any()) ? m.Reviews.Average(r => r.Rating) : 0,
                 ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
 
@@ -54,9 +54,9 @@ namespace MovieReview.Services
         }
 
         // get a movie by its id
-        public async Task<MovieReadDto> GetByIdAsync(long id)
+        public async Task<MovieReadDto?> GetByIdAsync(long id)
         {
-            Movie movie = await _repository.GetByIdWithReviewsAndRatingsAsync(id);
+            Movie? movie = await _repository.GetByIdWithReviewsAndRatingsAsync(id);
             if (movie == null) return null;
 
             var imdbRating = await _externalMovieService.GetImdbRatingAsync(movie.Title);
@@ -68,7 +68,7 @@ namespace MovieReview.Services
                 Description = movie.Description,
                 ReleaseYear = movie.ReleaseYear,
                 ReviewCount = movie.Reviews?.Count ?? 0,
-                AverageRating = movie.Reviews.Any() ? movie.Reviews.Average(r => r.Rating) : 0,
+                AverageRating = (movie.Reviews != null && movie.Reviews.Any()) ? movie.Reviews.Average(r => r.Rating) : 0,
                 ImdbRating = imdbRating
             };
         }
@@ -101,7 +101,7 @@ namespace MovieReview.Services
         // update a movie
         public async Task<bool> UpdateAsync(long id, MovieUpdateDto dto)
         {
-            Movie movie = await _repository.GetByIdAsync(id);
+            Movie? movie = await _repository.GetByIdAsync(id);
             if (movie == null) return false;
 
             movie.Title = dto.Title;
@@ -115,7 +115,7 @@ namespace MovieReview.Services
         // delete a movie
         public async Task<bool> DeleteAsync(long id)
         {
-            Movie movie = await _repository.GetByIdAsync(id);
+            Movie? movie = await _repository.GetByIdAsync(id);
             if (movie == null) return false;
 
             await _repository.DeleteAsync(movie);
@@ -133,7 +133,7 @@ namespace MovieReview.Services
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                AverageRating = (m.Reviews != null && m.Reviews.Any()) ? m.Reviews.Average(r => r.Rating) : 0,
                 ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
 
@@ -151,7 +151,7 @@ namespace MovieReview.Services
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                AverageRating = (m.Reviews != null && m.Reviews.Any()) ? m.Reviews.Average(r => r.Rating) : 0,
                 ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
 

@@ -1,4 +1,4 @@
-﻿namespace MovieReview.Models.DTOs
+namespace MovieReview.Models.DTOs
 {
     public class AuthResultDto
     {
@@ -10,11 +10,11 @@
         /// <summary>
         /// JWT
         /// </summary>
-        public string Token { get; set; }
+        public string? Token { get; set; }
 
         /// <summary>
         /// Message
         /// </summary>
-        public string Message { get; set; }
+        public required string Message { get; set; }
     }
 }

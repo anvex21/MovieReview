@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using MovieReview.Controllers;
 using MovieReview.Services;
 using MovieReview.Models.DTOs;
@@ -22,7 +22,7 @@ namespace MovieReview.Tests
         [Test]
         public async Task GetAll_ReturnsOk_WhenMoviesExist()
         {
-            _serviceMock.Setup(s => s.GetAllAsync()).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception" } });
+            _serviceMock.Setup(s => s.GetAllAsync()).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception", Description = "" } });
 
             var result = await _controller.GetAll();
 
@@ -43,7 +43,7 @@ namespace MovieReview.Tests
         public async Task GetAllMovies_WithQuery_ReturnsOk()
         {
             var query = new MovieQueryDto { PageNumber = 1, PageSize = 10 };
-            _serviceMock.Setup(s => s.GetAllAsync(query)).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception" } });
+            _serviceMock.Setup(s => s.GetAllAsync(query)).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception", Description = "" } });
 
             var result = await _controller.GetAllMovies(query);
 
@@ -75,7 +75,7 @@ namespace MovieReview.Tests
         [Test]
         public async Task GetTopRatedMovies_ReturnsOk()
         {
-            _serviceMock.Setup(s => s.GetTopRatedAsync(5)).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception", AverageRating = 9 } });
+            _serviceMock.Setup(s => s.GetTopRatedAsync(5)).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception", Description = "", AverageRating = 9 } });
 
             var result = await _controller.GetTopRatedMovies(5);
 
@@ -85,7 +85,7 @@ namespace MovieReview.Tests
         [Test]
         public async Task GetMoviesByYear_ReturnsOk_WhenMoviesExist()
         {
-            _serviceMock.Setup(s => s.GetByYearAsync(2010)).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception", ReleaseYear = 2010 } });
+            _serviceMock.Setup(s => s.GetByYearAsync(2010)).ReturnsAsync(new List<MovieReadDto> { new MovieReadDto { Id = 1, Title = "Inception", Description = "", ReleaseYear = 2010 } });
 
             var result = await _controller.GetMoviesByYear(2010);
 

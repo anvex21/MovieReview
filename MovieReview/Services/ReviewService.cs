@@ -15,9 +15,9 @@ namespace MovieReview.Services
         }
 
         // get a review by its id
-        public async Task<ReviewDto> GetByIdAsync(long id)
+        public async Task<ReviewDto?> GetByIdAsync(long id)
         {
-            Review review = await _reviewRepository.GetByIdAsync(id);
+            Review? review = await _reviewRepository.GetByIdAsync(id);
             return review == null ? null : MapToDto(review);
         }
 
@@ -53,7 +53,7 @@ namespace MovieReview.Services
         // update a review
         public async Task UpdateAsync(long id, ReviewUpdateDto dto, long userId)
         {
-            Review review = await _reviewRepository.GetByIdAsync(id);
+            Review? review = await _reviewRepository.GetByIdAsync(id);
             if (review == null || review.UserId != userId)
                 throw new UnauthorizedAccessException("You cannot edit this review.");
 
@@ -66,7 +66,7 @@ namespace MovieReview.Services
         // delete a review
         public async Task DeleteAsync(long id, long userId)
         {
-            Review review = await _reviewRepository.GetByIdAsync(id);
+            Review? review = await _reviewRepository.GetByIdAsync(id);
             if (review == null || review.UserId != userId)
                 throw new UnauthorizedAccessException("You cannot delete this review.");
 
@@ -82,7 +82,7 @@ namespace MovieReview.Services
                 Rating = review.Rating,
                 MovieId = review.MovieId,
                 UserId = review.UserId,
-                UserName = review.User?.UserName
+                UserName = review.User?.UserName ?? ""
             };
     }
 }

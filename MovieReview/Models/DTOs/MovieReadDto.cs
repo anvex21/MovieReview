@@ -9,11 +9,11 @@ namespace MovieReview.Models.DTOs
         /// <summary>
         /// Title
         /// </summary>
-        public string Title { get; set; }
+        public required string Title { get; set; }
         /// <summary>
         /// Description
         /// </summary>
-        public string Description { get; set; }
+        public required string Description { get; set; }
         /// <summary>
         /// Release year
         /// </summary>
