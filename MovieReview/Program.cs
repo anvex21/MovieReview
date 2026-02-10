@@ -127,7 +127,3 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
-
-// add a comment
-// add another comment
-// testing if this will change the README.md
