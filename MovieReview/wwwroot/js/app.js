@@ -224,16 +224,22 @@
       listEl.innerHTML = movies
         .map(
           (m, index) => `
-        <a href="#/movie/${m.id}" class="movie-card block rounded-2xl bg-slate-900/50 border border-white/10 p-5 backdrop-blur-sm group" style="animation: fadeInUp 0.5s ease-out forwards; animation-delay: ${index * 50}ms; opacity: 0;">
+        <a href="#/movie/${m.id}" class="movie-card block rounded-2xl bg-slate-900/50 border border-white/10 p-5 backdrop-blur-sm group">
           <div class="flex items-start justify-between gap-3 mb-2">
             <h3 class="font-display font-semibold text-lg text-white group-hover:text-brand-300 transition-colors line-clamp-1">${escapeHtml(m.title)}</h3>
             <span class="shrink-0 text-xs font-medium px-2 py-1 rounded-full bg-white/5 text-slate-400 border border-white/5">${escapeHtml(m.releaseYear)}</span>
           </div>
           <p class="text-slate-400 text-sm mt-2 line-clamp-2 leading-relaxed">${escapeHtml(m.description || 'No description available')}</p>
           <div class="mt-4 flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span class="star-rating">${generateStars(m.averageRating)}</span>
-              <span class="text-brand-400 font-semibold text-sm ml-1">${formatRating(m.averageRating)}</span>
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-1.5">
+                <span class="star-rating">${generateStars(m.averageRating)}</span>
+                <span class="text-brand-400 font-semibold text-sm ml-1">${formatRating(m.averageRating)}</span>
+              </div>
+              <div class="text-xs text-slate-400">
+                <span class="font-semibold text-yellow-400">IMDb:</span>
+                <span>${(m.imdbRating ?? m.ImdbRating) ?? 'N/A'}/10</span>
+              </div>
             </div>
             <span class="text-slate-500 text-xs flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
@@ -386,13 +392,19 @@
       metaEl.innerHTML = `<span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Released ${movie.releaseYear}</span>`;
       descEl.textContent = movie.description || 'No description available.';
       statsEl.innerHTML = `
-        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-          <span class="star-rating">${generateStars(movie.averageRating)}</span>
-          <span class="text-brand-300 font-semibold ml-1">${formatRating(movie.averageRating)}</span>
-        </div>
-        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
-          <span>${movie.reviewCount} ${movie.reviewCount === 1 ? 'review' : 'reviews'}</span>
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+            <span class="star-rating">${generateStars(movie.averageRating)}</span>
+            <span class="text-brand-300 font-semibold ml-1">${formatRating(movie.averageRating)}</span>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-amber-400/40 text-amber-300">
+            <span class="text-xs font-semibold tracking-wide">IMDb</span>
+            <span class="font-semibold">${(movie.imdbRating ?? movie.ImdbRating) ?? 'N/A'}/10</span>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+            <span>${movie.reviewCount} ${movie.reviewCount === 1 ? 'review' : 'reviews'}</span>
+          </div>
         </div>
       `;
 
@@ -404,7 +416,7 @@
             (r, index) => {
               const canDelete = currentUserId != null && r.userId === currentUserId;
               return `
-          <div class="review-card rounded-xl bg-slate-800/50 border border-white/10 p-4 backdrop-blur-sm" style="animation: fadeInUp 0.4s ease-out forwards; animation-delay: ${index * 50}ms; opacity: 0;">
+          <div class="review-card rounded-xl bg-slate-800/50 border border-white/10 p-4 backdrop-blur-sm">
             <div class="flex justify-between items-start gap-3">
               <div class="flex-1 min-w-0">
                 <p class="text-slate-200 leading-relaxed">${escapeHtml(r.content)}</p>

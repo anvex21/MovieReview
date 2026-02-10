@@ -13,13 +13,17 @@ namespace MovieReview.Tests
     public class MovieServiceTests
     {
         private Mock<IMovieRepository> _repoMock = null!;
+        private Mock<IExternalMovieService> _externalMock = null!;
         private MovieService _service = null!;
 
         [SetUp]
         public void Setup()
         {
             _repoMock = new Mock<IMovieRepository>();
-            _service = new MovieService(_repoMock.Object);
+            _externalMock = new Mock<IExternalMovieService>();
+            _externalMock.Setup(s => s.GetImdbRatingAsync(It.IsAny<string>()))
+                .ReturnsAsync("N/A");
+            _service = new MovieService(_repoMock.Object, _externalMock.Object);
         }
 
         [Test]

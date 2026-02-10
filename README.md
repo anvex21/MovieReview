@@ -117,6 +117,33 @@ The solution includes a dedicated test project (`MovieReview.Tests`) to ensure A
     ```
 ---
 
+## Optional: IMDb / OMDb integration
+
+The app can display **IMDb ratings** for movies by querying the public OMDb API.  
+This integration is **optional** and is disabled if no API key is configured.
+
+- **1. Get an OMDb API key (optional)**
+  - Sign up at `https://www.omdbapi.com/` and obtain a free API key.
+
+- **2. Configure the key using .NET user secrets (recommended for local dev)**
+
+  From the repository root, run:
+
+  ```bash
+  dotnet user-secrets init --project MovieReview/MovieReview.csproj
+  dotnet user-secrets set "Omdb:ApiKey" "your-omdb-api-key" --project MovieReview/MovieReview.csproj
+  ```
+
+  This stores the key **outside source control**, so it is not committed to GitHub.
+
+- **3. Run the app as usual**
+
+  ```bash
+  dotnet run --project MovieReview/MovieReview.csproj --launch-profile https
+  ```
+
+If the key is not set or OMDb does not find a matching movie, the UI will simply show **`N/A/10`** for the IMDb rating.
+
 ## Notes
 **Without a valid Bearer token, you can only access Register and Login.**
 

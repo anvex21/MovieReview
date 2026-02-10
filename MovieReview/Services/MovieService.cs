@@ -7,26 +7,31 @@ namespace MovieReview.Services
     public class MovieService: IMovieService
     {
         private readonly IMovieRepository _repository;
+        private readonly IExternalMovieService _externalMovieService;
 
         // constructor
-        public MovieService(IMovieRepository repository)
+        public MovieService(IMovieRepository repository, IExternalMovieService externalMovieService)
         {
             _repository = repository;
+            _externalMovieService = externalMovieService;
         }
 
         // get all movies
         public async Task<IEnumerable<MovieReadDto>> GetAllAsync()
         {
             IEnumerable<Movie> movies = await _repository.GetAllAsync();
-            return movies.Select(m => new MovieReadDto
+            var tasks = movies.Select(async m => new MovieReadDto
             {
                 Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
+
+            return await Task.WhenAll(tasks);
         }
 
         // get all movies with parameters
@@ -34,15 +39,18 @@ namespace MovieReview.Services
         {
             IEnumerable<Movie> movies = await _repository.GetAllAsync(queryParams);
 
-            return movies.Select(m => new MovieReadDto
+            var tasks = movies.Select(async m => new MovieReadDto
             {
                 Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews != null && m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+                AverageRating = m.Reviews != null && m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
+
+            return await Task.WhenAll(tasks);
         }
 
         // get a movie by its id
@@ -51,6 +59,8 @@ namespace MovieReview.Services
             Movie movie = await _repository.GetByIdWithReviewsAndRatingsAsync(id);
             if (movie == null) return null;
 
+            var imdbRating = await _externalMovieService.GetImdbRatingAsync(movie.Title);
+
             return new MovieReadDto
             {
                 Id = movie.Id,
@@ -58,7 +68,8 @@ namespace MovieReview.Services
                 Description = movie.Description,
                 ReleaseYear = movie.ReleaseYear,
                 ReviewCount = movie.Reviews?.Count ?? 0,
-                AverageRating = movie.Reviews.Any() ? movie.Reviews.Average(r => r.Rating) : 0
+                AverageRating = movie.Reviews.Any() ? movie.Reviews.Average(r => r.Rating) : 0,
+                ImdbRating = imdbRating
             };
         }
 
@@ -73,6 +84,8 @@ namespace MovieReview.Services
             };
             await _repository.CreateAsync(movie);
 
+            var imdbRating = await _externalMovieService.GetImdbRatingAsync(movie.Title);
+
             return new MovieReadDto
             {
                 Id = movie.Id,
@@ -80,7 +93,8 @@ namespace MovieReview.Services
                 Description = movie.Description,
                 ReleaseYear = movie.ReleaseYear,
                 ReviewCount = 0,
-                AverageRating = 0
+                AverageRating = 0,
+                ImdbRating = imdbRating
             };
         }
 
@@ -112,30 +126,36 @@ namespace MovieReview.Services
         public async Task<IEnumerable<MovieReadDto>> GetTopRatedAsync(int count)
         {
             IEnumerable<Movie> movies = await _repository.GetTopRatedAsync(count);
-            return movies.Select(m => new MovieReadDto
+            var tasks = movies.Select(async m => new MovieReadDto
             {
                 Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
+
+            return await Task.WhenAll(tasks);
         }
 
         // get movies released in a certain year
         public async Task<IEnumerable<MovieReadDto>> GetByYearAsync(int year)
         {
             IEnumerable<Movie> movies = await _repository.GetByYearAsync(year);
-            return movies.Select(m => new MovieReadDto
+            var tasks = movies.Select(async m => new MovieReadDto
             {
                 Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
                 ReleaseYear = m.ReleaseYear,
                 ReviewCount = m.Reviews?.Count ?? 0,
-                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0
+                AverageRating = m.Reviews.Any() ? m.Reviews.Average(r => r.Rating) : 0,
+                ImdbRating = await _externalMovieService.GetImdbRatingAsync(m.Title)
             });
+
+            return await Task.WhenAll(tasks);
         }
     }
 }

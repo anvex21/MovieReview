@@ -1,4 +1,4 @@
-﻿namespace MovieReview.Models.DTOs
+namespace MovieReview.Models.DTOs
 {
     public class MovieReadDto
     {
@@ -26,5 +26,9 @@
         /// Average rating
         /// </summary>
         public double AverageRating { get; set; }
+        /// <summary>
+        /// IMDb rating (from OMDb), as a string (e.g. "8.5" or "N/A")
+        /// </summary>
+        public string? ImdbRating { get; set; }
     }
 }
