@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MovieReview.Models.DTOs
 {
@@ -19,7 +19,7 @@ namespace MovieReview.Models.DTOs
         /// <summary>
         /// Release year
         /// </summary>
-        [Required, Range(1800, 2025)]
+        [Required, Range(1800, 2026)]
         public int ReleaseYear { get; set; }
     }
 }
