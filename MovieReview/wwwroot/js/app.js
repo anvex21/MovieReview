@@ -197,7 +197,20 @@
 
     emptyEl?.classList.add('hidden');
     errEl?.classList.add('hidden');
-    if (listEl) listEl.innerHTML = '';
+    // Show loading skeletons
+    if (listEl) {
+      listEl.innerHTML = Array(6).fill('').map(() => `
+        <div class="rounded-2xl bg-slate-900/50 border border-white/10 p-5">
+          <div class="skeleton h-6 w-3/4 mb-3"></div>
+          <div class="skeleton h-4 w-full mb-2"></div>
+          <div class="skeleton h-4 w-2/3 mb-4"></div>
+          <div class="flex justify-between">
+            <div class="skeleton h-5 w-20"></div>
+            <div class="skeleton h-4 w-16"></div>
+          </div>
+        </div>
+      `).join('');
+    }
 
     try {
       const movies = await api('api/Movies/GetAllMoviesWithQuery?' + params.toString());
@@ -210,14 +223,22 @@
       }
       listEl.innerHTML = movies
         .map(
-          (m) => `
-        <a href="#/movie/${m.id}" class="block rounded-xl bg-surface-800/80 border border-surface-600/50 p-5 hover:border-brand-500/50 transition group">
-          <h3 class="font-display font-semibold text-lg text-white group-hover:text-brand-400 transition">${escapeHtml(m.title)}</h3>
-          <p class="text-zinc-500 text-sm mt-1">${escapeHtml(m.releaseYear)}</p>
-          <p class="text-zinc-400 text-sm mt-2 line-clamp-2">${escapeHtml(m.description || '')}</p>
-          <div class="mt-3 flex items-center gap-2 text-sm">
-            <span class="text-brand-400 font-medium">★ ${formatRating(m.averageRating)}</span>
-            <span class="text-zinc-500">${m.reviewCount} reviews</span>
+          (m, index) => `
+        <a href="#/movie/${m.id}" class="movie-card block rounded-2xl bg-slate-900/50 border border-white/10 p-5 backdrop-blur-sm group" style="animation: fadeInUp 0.5s ease-out forwards; animation-delay: ${index * 50}ms; opacity: 0;">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <h3 class="font-display font-semibold text-lg text-white group-hover:text-brand-300 transition-colors line-clamp-1">${escapeHtml(m.title)}</h3>
+            <span class="shrink-0 text-xs font-medium px-2 py-1 rounded-full bg-white/5 text-slate-400 border border-white/5">${escapeHtml(m.releaseYear)}</span>
+          </div>
+          <p class="text-slate-400 text-sm mt-2 line-clamp-2 leading-relaxed">${escapeHtml(m.description || 'No description available')}</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="star-rating">${generateStars(m.averageRating)}</span>
+              <span class="text-brand-400 font-semibold text-sm ml-1">${formatRating(m.averageRating)}</span>
+            </div>
+            <span class="text-slate-500 text-xs flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              ${m.reviewCount} ${m.reviewCount === 1 ? 'review' : 'reviews'}
+            </span>
           </div>
         </a>
       `
@@ -362,11 +383,17 @@
       }
       currentMovie = movie;
       titleEl.textContent = movie.title || 'Movie';
-      metaEl.textContent = `Released ${movie.releaseYear}`;
-      descEl.textContent = movie.description || 'No description.';
+      metaEl.innerHTML = `<span class="inline-flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Released ${movie.releaseYear}</span>`;
+      descEl.textContent = movie.description || 'No description available.';
       statsEl.innerHTML = `
-        <span>★ ${formatRating(movie.averageRating)}</span>
-        <span>${movie.reviewCount} reviews</span>
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <span class="star-rating">${generateStars(movie.averageRating)}</span>
+          <span class="text-brand-300 font-semibold ml-1">${formatRating(movie.averageRating)}</span>
+        </div>
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+          <span>${movie.reviewCount} ${movie.reviewCount === 1 ? 'review' : 'reviews'}</span>
+        </div>
       `;
 
       const reviews = await api(`api/Reviews/GetByMovieId/${id}`);
@@ -374,18 +401,26 @@
       if (reviews?.length) {
         reviewsList.innerHTML = reviews
           .map(
-            (r) => {
+            (r, index) => {
               const canDelete = currentUserId != null && r.userId === currentUserId;
               return `
-          <div class="rounded-lg bg-surface-700/50 border border-surface-600/50 p-4">
-            <div class="flex justify-between items-start gap-2">
-              <p class="text-zinc-300">${escapeHtml(r.content)}</p>
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="text-brand-400 font-medium">${r.rating}/10</span>
-                ${canDelete ? `<button type="button" data-delete-review="${r.id}" class="text-red-400 hover:text-red-300 text-xs font-medium transition">Delete</button>` : ''}
+          <div class="review-card rounded-xl bg-slate-800/50 border border-white/10 p-4 backdrop-blur-sm" style="animation: fadeInUp 0.4s ease-out forwards; animation-delay: ${index * 50}ms; opacity: 0;">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex-1 min-w-0">
+                <p class="text-slate-200 leading-relaxed">${escapeHtml(r.content)}</p>
+                <div class="flex items-center gap-2 mt-3">
+                  <div class="w-6 h-6 rounded-full bg-gradient-to-br from-brand-400 to-indigo-500 flex items-center justify-center text-xs font-bold text-white">${escapeHtml((r.userName || 'A').charAt(0).toUpperCase())}</div>
+                  <span class="text-slate-400 text-sm font-medium">${escapeHtml(r.userName || 'Anonymous')}</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-end gap-2 shrink-0">
+                <div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-brand-500/20 border border-brand-400/30">
+                  <span class="text-amber-400 text-sm">★</span>
+                  <span class="text-brand-300 font-semibold text-sm">${r.rating}/10</span>
+                </div>
+                ${canDelete ? `<button type="button" data-delete-review="${r.id}" class="text-rose-400 hover:text-rose-300 text-xs font-medium transition-colors hover:underline">Delete</button>` : ''}
               </div>
             </div>
-            <p class="text-zinc-500 text-sm mt-2">${escapeHtml(r.userName || 'Anonymous')}</p>
           </div>
         `;
             }
@@ -468,6 +503,20 @@
   function formatRating(n) {
     if (n == null || isNaN(n)) return '—';
     return Number(n).toFixed(1);
+  }
+
+  function generateStars(rating) {
+    if (rating == null || isNaN(rating)) rating = 0;
+    const normalizedRating = Math.round(rating / 2); // Convert 1-10 scale to 1-5 stars
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+      if (i <= normalizedRating) {
+        stars += '<span class="star filled">★</span>';
+      } else {
+        stars += '<span class="star">★</span>';
+      }
+    }
+    return stars;
   }
 
   function debounce(fn, ms) {
