@@ -62,9 +62,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
 builder.Services.AddDbContext<MovieReviewDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 // Add Identity
 builder.Services.AddIdentity<User, IdentityRole<long>>(options =>
@@ -127,4 +126,9 @@ app.MapControllers();
 // SPA fallback so client-side routing works
 app.MapFallbackToFile("index.html");
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<MovieReviewDbContext>();
+    db.Database.Migrate();
+}
 app.Run();

@@ -21,22 +21,6 @@ namespace MovieReview.Migrations
                     { 2L, "A hacker discovers the true nature of reality.", 1999, "The Matrix" },
                     { 3L, "A team travels through a wormhole to save humanity.", 2014, "Interstellar" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Reviews",
-                columns: new[] { "Id", "Content", "MovieId", "Rating", "UserId" },
-                values: new object[,]
-                {
-                    { 1L, "Amazing movie, loved every second!", 1L, 9, 1L },
-                    { 2L, "Not bad, but could have been better.", 2L, 6, 2L },
-                    { 3L, "Great cast and visuals, weak story.", 3L, 7, 3L },
-                    { 4L, "Revolutionary sci-fi, a true classic.", 2L, 10, 1L },
-                    { 5L, "Great action but the sequels ruined it a bit.", 2L, 8, 2L },
-                    { 6L, "Never gets old, still one of my favorites.", 2L, 9, 3L },
-                    { 7L, "Visually stunning and emotional.", 3L, 9, 1L },
-                    { 8L, "The science parts were too heavy but still good.", 3L, 7, 2L },
-                    { 9L, "Masterpiece, Nolan at his best.", 3L, 10, 3L }
-                });
         }
 
         /// <inheritdoc />
