@@ -1,3 +1,4 @@
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
 using MovieReview.Repositories;
@@ -54,10 +55,10 @@ namespace MovieReview.Services
         }
 
         // get a movie by its id
-        public async Task<MovieReadDto?> GetByIdAsync(long id)
+        public async Task<MovieReadDto> GetByIdAsync(long id)
         {
             Movie? movie = await _repository.GetByIdWithReviewsAndRatingsAsync(id);
-            if (movie == null) return null;
+            if (movie == null) throw new NotFoundException("No such movie found.");
 
             var imdbRating = await _externalMovieService.GetImdbRatingAsync(movie.Title);
 
@@ -99,27 +100,25 @@ namespace MovieReview.Services
         }
 
         // update a movie
-        public async Task<bool> UpdateAsync(long id, MovieUpdateDto dto)
+        public async Task UpdateAsync(long id, MovieUpdateDto dto)
         {
             Movie? movie = await _repository.GetByIdAsync(id);
-            if (movie == null) return false;
+            if (movie == null) throw new NotFoundException("No such movie found.");
 
             movie.Title = dto.Title;
             movie.Description = dto.Description;
             movie.ReleaseYear = dto.ReleaseYear;
 
             await _repository.UpdateAsync(movie);
-            return true;
         }
 
         // delete a movie
-        public async Task<bool> DeleteAsync(long id)
+        public async Task DeleteAsync(long id)
         {
             Movie? movie = await _repository.GetByIdAsync(id);
-            if (movie == null) return false;
+            if (movie == null) throw new NotFoundException("No such movie found.");
 
             await _repository.DeleteAsync(movie);
-            return true;
         }
 
         // get top rated movies

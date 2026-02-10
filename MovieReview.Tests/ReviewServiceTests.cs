@@ -1,9 +1,10 @@
 using Moq;
 using NUnit.Framework;
-using MovieReview.Services;
-using MovieReview.Repositories;
-using MovieReview.Models.Entities;
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
+using MovieReview.Models.Entities;
+using MovieReview.Repositories;
+using MovieReview.Services;
 using System.Collections.Generic;
 
 namespace MovieReview.Tests
@@ -37,13 +38,11 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task GetByIdAsync_ReturnsNull_WhenReviewDoesNotExist()
+        public void GetByIdAsync_ThrowsNotFoundException_WhenReviewDoesNotExist()
         {
             _repoMock.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Review?)null);
 
-            var result = await _service.GetByIdAsync(999);
-
-            Assert.That(result, Is.Null);
+            Assert.ThrowsAsync<NotFoundException>(async () => await _service.GetByIdAsync(999));
         }
 
         [Test]
@@ -101,12 +100,12 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public void UpdateAsync_ReviewNotFound_ThrowsUnauthorizedAccessException()
+        public void UpdateAsync_ReviewNotFound_ThrowsNotFoundException()
         {
             _repoMock.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Review?)null);
             var dto = new ReviewUpdateDto { Content = "Updated", Rating = 8 };
 
-            Assert.ThrowsAsync<UnauthorizedAccessException>(() => _service.UpdateAsync(999, dto, 1));
+            Assert.ThrowsAsync<NotFoundException>(() => _service.UpdateAsync(999, dto, 1));
         }
 
         [Test]
@@ -131,11 +130,11 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public void DeleteAsync_ReviewNotFound_ThrowsUnauthorizedAccessException()
+        public void DeleteAsync_ReviewNotFound_ThrowsNotFoundException()
         {
             _repoMock.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Review?)null);
 
-            Assert.ThrowsAsync<UnauthorizedAccessException>(() => _service.DeleteAsync(999, 1));
+            Assert.ThrowsAsync<NotFoundException>(() => _service.DeleteAsync(999, 1));
         }
 
         [Test]

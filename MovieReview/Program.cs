@@ -7,7 +7,7 @@ using MovieReview.Data;
 using MovieReview.Models.Entities;
 using MovieReview.Repositories;
 using MovieReview.Services;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using MovieReview.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -107,6 +107,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+
+// Add middleware
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

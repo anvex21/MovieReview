@@ -1,3 +1,4 @@
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
 using MovieReview.Repositories;
@@ -15,10 +16,11 @@ namespace MovieReview.Services
         }
 
         // get a review by its id
-        public async Task<ReviewDto?> GetByIdAsync(long id)
+        public async Task<ReviewDto> GetByIdAsync(long id)
         {
             Review? review = await _reviewRepository.GetByIdAsync(id);
-            return review == null ? null : MapToDto(review);
+            if (review == null) throw new NotFoundException("Review not found.");
+            return MapToDto(review);
         }
 
         // get a review by its movie id
@@ -54,8 +56,8 @@ namespace MovieReview.Services
         public async Task UpdateAsync(long id, ReviewUpdateDto dto, long userId)
         {
             Review? review = await _reviewRepository.GetByIdAsync(id);
-            if (review == null || review.UserId != userId)
-                throw new UnauthorizedAccessException("You cannot edit this review.");
+            if (review == null) throw new NotFoundException("Review not found.");
+            if (review.UserId != userId) throw new UnauthorizedAccessException("You cannot edit this review.");
 
             review.Content = dto.Content;
             review.Rating = dto.Rating;
@@ -67,8 +69,8 @@ namespace MovieReview.Services
         public async Task DeleteAsync(long id, long userId)
         {
             Review? review = await _reviewRepository.GetByIdAsync(id);
-            if (review == null || review.UserId != userId)
-                throw new UnauthorizedAccessException("You cannot delete this review.");
+            if (review == null) throw new NotFoundException("Review not found.");
+            if (review.UserId != userId) throw new UnauthorizedAccessException("You cannot delete this review.");
 
             await _reviewRepository.DeleteAsync(review);
         }

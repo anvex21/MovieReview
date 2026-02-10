@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieReview.Models.DTOs;
 using MovieReview.Services;
@@ -20,39 +19,38 @@ namespace MovieReview.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<ReviewDto>> GetById(long id)
+        public async Task<IActionResult> GetById(long id)
         {
-            ReviewDto? review = await _reviewService.GetByIdAsync(id);
-            if (review == null) return NotFound();
+            var review = await _reviewService.GetByIdAsync(id);
             return Ok(review);
         }
 
         [HttpGet("GetByMovieId/{movieId}")]
-        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetByMovie(long movieId)
+        public async Task<IActionResult> GetByMovie(long movieId)
         {
-            return Ok(await _reviewService.GetByMovieIdAsync(movieId));
+            var reviews = await _reviewService.GetByMovieIdAsync(movieId);
+            return Ok(reviews);
         }
 
         [HttpGet("GetByUserId/{userId}")]
-        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetByUser(long userId)
+        public async Task<IActionResult> GetByUser(long userId)
         {
-            return Ok(await _reviewService.GetByUserIdAsync(userId));
+            var reviews = await _reviewService.GetByUserIdAsync(userId);
+            return Ok(reviews);
         }
 
         [HttpPost("AddReview")]
-        public async Task<ActionResult<ReviewDto>> Create([FromBody] ReviewCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] ReviewCreateDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("NameIdentifier claim missing"));
-            ReviewDto review = await _reviewService.AddAsync(dto, userId);
+            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var review = await _reviewService.AddAsync(dto, userId);
             return CreatedAtAction(nameof(GetById), new { id = review.Id }, review);
         }
 
         [HttpPut("UpdateReview/{id}")]
         public async Task<IActionResult> Update(long id, [FromBody] ReviewUpdateDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("NameIdentifier claim missing"));
+            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             await _reviewService.UpdateAsync(id, dto, userId);
             return NoContent();
         }
@@ -60,7 +58,7 @@ namespace MovieReview.Controllers
         [HttpDelete("DeleteReview/{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("NameIdentifier claim missing"));
+            long userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             await _reviewService.DeleteAsync(id, userId);
             return NoContent();
         }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReview.Models.DTOs;
 using MovieReview.Services;
@@ -18,113 +17,60 @@ namespace MovieReview.Controllers
             _service = service;
         }
 
-
-        /// <summary>
-        /// Get all movies
-        /// </summary>
-        /// <returns></returns>
         [HttpGet("GetAllMovies")]
         public async Task<IActionResult> GetAll()
         {
             var movies = await _service.GetAllAsync();
-            if (!movies.Any())
-            {
-                return NotFound("No movies found.");
-            }
             return Ok(movies);
         }
 
-        /// <summary>
-        /// Get all with filtering/sorting/pagination
-        /// </summary>
-        /// <param name="queryParams"></param>
-        /// <returns></returns>
         [HttpGet("GetAllMoviesWithQuery")]
         public async Task<IActionResult> GetAllMovies([FromQuery] MovieQueryDto queryParams)
         {
-            IEnumerable<MovieReadDto> movies = await _service.GetAllAsync(queryParams);
+            var movies = await _service.GetAllAsync(queryParams);
             return Ok(movies);
         }
 
-        /// <summary>
-        /// Get movie by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {
             var movie = await _service.GetByIdAsync(id);
-            if (movie is null) return NotFound("No such movie found.");
             return Ok(movie);
         }
 
-        /// <summary>
-        /// Get top rated movies
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
         [HttpGet("GetTopRatedMovies")]
         public async Task<IActionResult> GetTopRatedMovies(int count)
         {
-            IEnumerable<MovieReadDto> movies = await _service.GetTopRatedAsync(count);
+            var movies = await _service.GetTopRatedAsync(count);
             return Ok(movies);
         }
 
-        /// <summary>
-        /// Get all the movies released in a given year
-        /// </summary>
-        /// <param name="year"></param>
-        /// <returns></returns>
         [HttpGet("GetMoviesByYear/{year}")]
         public async Task<IActionResult> GetMoviesByYear(int year)
         {
-            IEnumerable<MovieReadDto> movies = await _service.GetByYearAsync(year);
-            if (!movies.Any()) return NotFound("No movies found for this year.");
+            var movies = await _service.GetByYearAsync(year);
             return Ok(movies);
         }
 
-        /// <summary>
-        /// Add a movie
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
         [HttpPost("AddMovie")]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             var movie = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = movie.Id }, movie);
         }
 
-        /// <summary>
-        /// Update a movie
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="dto"></param>
-        /// <returns></returns>
         [HttpPut("UpdateMovie/{id}")]
         public async Task<IActionResult> Update(long id, [FromBody] MovieUpdateDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var success = await _service.UpdateAsync(id, dto);
-            if (!success) return NotFound("Not found.");
+            await _service.UpdateAsync(id, dto);
             return NoContent();
         }
 
-        /// <summary>
-        /// Delete a movie
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpDelete("DeleteMovie/{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var success = await _service.DeleteAsync(id);
-            if (!success) return NotFound("No such movie.");
+            await _service.DeleteAsync(id);
             return NoContent();
         }
-
-        
     }
 }

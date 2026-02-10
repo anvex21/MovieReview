@@ -1,7 +1,8 @@
 using Moq;
 using MovieReview.Controllers;
-using MovieReview.Services;
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
+using MovieReview.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReview.Tests
@@ -30,13 +31,15 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task GetAll_ReturnsNotFound_WhenNoMoviesExist()
+        public async Task GetAll_ReturnsOk_WhenNoMoviesExist()
         {
             _serviceMock.Setup(s => s.GetAllAsync()).ReturnsAsync(new List<MovieReadDto>());
 
             var result = await _controller.GetAll();
 
-            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            Assert.That(((OkObjectResult)result).Value, Is.Not.Null);
+            Assert.That((IEnumerable<MovieReadDto>)((OkObjectResult)result).Value!, Is.Empty);
         }
 
         [Test]
@@ -63,13 +66,11 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task GetById_ReturnsNotFound_WhenMovieDoesNotExist()
+        public void GetById_ThrowsNotFoundException_WhenMovieDoesNotExist()
         {
-            _serviceMock.Setup(s => s.GetByIdAsync(1)).ReturnsAsync((MovieReadDto?)null);
+            _serviceMock.Setup(s => s.GetByIdAsync(1)).ThrowsAsync(new NotFoundException("No such movie found."));
 
-            var result = await _controller.GetById(1);
-
-            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+            Assert.ThrowsAsync<NotFoundException>(async () => await _controller.GetById(1));
         }
 
         [Test]
@@ -93,13 +94,13 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task GetMoviesByYear_ReturnsNotFound_WhenNoMoviesForYear()
+        public async Task GetMoviesByYear_ReturnsOk_WhenNoMoviesForYear()
         {
             _serviceMock.Setup(s => s.GetByYearAsync(1900)).ReturnsAsync(new List<MovieReadDto>());
 
             var result = await _controller.GetMoviesByYear(1900);
 
-            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
         }
 
         [Test]
@@ -118,21 +119,10 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task Create_ReturnsBadRequest_WhenModelStateInvalid()
-        {
-            var dto = new MovieCreateDto { Title = "Matrix", Description = "Sci-fi", ReleaseYear = 1999 };
-            _controller.ModelState.AddModelError("Title", "Required");
-
-            var result = await _controller.Create(dto);
-
-            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
-        }
-
-        [Test]
         public async Task Update_ReturnsNoContent_WhenSuccess()
         {
             var dto = new MovieUpdateDto { Title = "New", Description = "NewDesc", ReleaseYear = 2001 };
-            _serviceMock.Setup(s => s.UpdateAsync(1, dto)).ReturnsAsync(true);
+            _serviceMock.Setup(s => s.UpdateAsync(1, dto)).Returns(Task.CompletedTask);
 
             var result = await _controller.Update(1, dto);
 
@@ -140,31 +130,18 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task Update_ReturnsNotFound_WhenMovieDoesNotExist()
+        public void Update_ThrowsNotFoundException_WhenMovieDoesNotExist()
         {
             var dto = new MovieUpdateDto { Title = "New", Description = "NewDesc", ReleaseYear = 2001 };
-            _serviceMock.Setup(s => s.UpdateAsync(999, dto)).ReturnsAsync(false);
+            _serviceMock.Setup(s => s.UpdateAsync(999, dto)).ThrowsAsync(new NotFoundException("No such movie found."));
 
-            var result = await _controller.Update(999, dto);
-
-            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
-        }
-
-        [Test]
-        public async Task Update_ReturnsBadRequest_WhenModelStateInvalid()
-        {
-            var dto = new MovieUpdateDto { Title = "New", Description = "NewDesc", ReleaseYear = 2001 };
-            _controller.ModelState.AddModelError("Title", "Required");
-
-            var result = await _controller.Update(1, dto);
-
-            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+            Assert.ThrowsAsync<NotFoundException>(async () => await _controller.Update(999, dto));
         }
 
         [Test]
         public async Task Delete_ReturnsNoContent_WhenSuccess()
         {
-            _serviceMock.Setup(s => s.DeleteAsync(1)).ReturnsAsync(true);
+            _serviceMock.Setup(s => s.DeleteAsync(1)).Returns(Task.CompletedTask);
 
             var result = await _controller.Delete(1);
 
@@ -172,13 +149,11 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task Delete_ReturnsNotFound_WhenMovieDoesNotExist()
+        public void Delete_ThrowsNotFoundException_WhenMovieDoesNotExist()
         {
-            _serviceMock.Setup(s => s.DeleteAsync(999)).ReturnsAsync(false);
+            _serviceMock.Setup(s => s.DeleteAsync(999)).ThrowsAsync(new NotFoundException("No such movie found."));
 
-            var result = await _controller.Delete(999);
-
-            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+            Assert.ThrowsAsync<NotFoundException>(async () => await _controller.Delete(999));
         }
     }
 }

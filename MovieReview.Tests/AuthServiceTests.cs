@@ -1,8 +1,9 @@
 using Moq;
 using NUnit.Framework;
-using MovieReview.Services;
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
+using MovieReview.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -46,30 +47,26 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task RegisterAsync_ReturnsFailure_WhenUsernameExists()
+        public void RegisterAsync_ThrowsInvalidOperationException_WhenUsernameExists()
         {
             var dto = new RegisterDto { Username = "alice", Email = "alice@test.com", Password = "P@ssw0rd!" };
             var existingUser = new User { Id = 1, UserName = dto.Username };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync(existingUser);
 
-            var result = await _service.RegisterAsync(dto);
-
-            Assert.That(result.Success, Is.False);
-            Assert.That(result.Message, Is.EqualTo("Username already exists"));
+            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () => await _service.RegisterAsync(dto));
+            Assert.That(ex!.Message, Is.EqualTo("Username already exists"));
         }
 
         [Test]
-        public async Task RegisterAsync_ReturnsFailure_WhenCreateFails()
+        public void RegisterAsync_ThrowsInvalidOperationException_WhenCreateFails()
         {
             var dto = new RegisterDto { Username = "alice", Email = "alice@test.com", Password = "weak" };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync((User?)null);
             var errors = new[] { new IdentityError { Description = "Password too short" } };
             _userManagerMock.Setup(u => u.CreateAsync(It.IsAny<User>(), dto.Password)).ReturnsAsync(IdentityResult.Failed(errors));
 
-            var result = await _service.RegisterAsync(dto);
-
-            Assert.That(result.Success, Is.False);
-            Assert.That(result.Message, Does.Contain("Password too short"));
+            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () => await _service.RegisterAsync(dto));
+            Assert.That(ex!.Message, Does.Contain("Password too short"));
         }
 
         [Test]
@@ -88,29 +85,25 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task LoginAsync_ReturnsFailure_WhenUserNotFound()
+        public void LoginAsync_ThrowsUnauthorizedException_WhenUserNotFound()
         {
             var dto = new LoginDto { Username = "unknown", Password = "P@ssw0rd!" };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync((User?)null);
 
-            var result = await _service.LoginAsync(dto);
-
-            Assert.That(result.Success, Is.False);
-            Assert.That(result.Message, Is.EqualTo("Invalid username or password"));
+            var ex = Assert.ThrowsAsync<UnauthorizedException>(async () => await _service.LoginAsync(dto));
+            Assert.That(ex!.Message, Is.EqualTo("Invalid username or password"));
         }
 
         [Test]
-        public async Task LoginAsync_ReturnsFailure_WhenPasswordInvalid()
+        public void LoginAsync_ThrowsUnauthorizedException_WhenPasswordInvalid()
         {
             var dto = new LoginDto { Username = "alice", Password = "wrong" };
             var user = new User { Id = 1, UserName = dto.Username };
             _userManagerMock.Setup(u => u.FindByNameAsync(dto.Username)).ReturnsAsync(user);
             _userManagerMock.Setup(u => u.CheckPasswordAsync(user, dto.Password)).ReturnsAsync(false);
 
-            var result = await _service.LoginAsync(dto);
-
-            Assert.That(result.Success, Is.False);
-            Assert.That(result.Message, Is.EqualTo("Invalid username or password"));
+            var ex = Assert.ThrowsAsync<UnauthorizedException>(async () => await _service.LoginAsync(dto));
+            Assert.That(ex!.Message, Is.EqualTo("Invalid username or password"));
         }
     }
 }

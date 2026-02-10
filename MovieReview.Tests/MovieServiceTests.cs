@@ -1,9 +1,10 @@
 using Moq;
 using NUnit.Framework;
-using MovieReview.Services;
-using MovieReview.Repositories;
-using MovieReview.Models.Entities;
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
+using MovieReview.Models.Entities;
+using MovieReview.Repositories;
+using MovieReview.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -73,13 +74,11 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task GetByIdAsync_ReturnsNull_WhenMovieDoesNotExist()
+        public void GetByIdAsync_ThrowsNotFoundException_WhenMovieDoesNotExist()
         {
             _repoMock.Setup(r => r.GetByIdWithReviewsAndRatingsAsync(999)).ReturnsAsync((Movie?)null);
 
-            var result = await _service.GetByIdAsync(999);
-
-            Assert.That(result, Is.Null);
+            Assert.ThrowsAsync<NotFoundException>(async () => await _service.GetByIdAsync(999));
         }
 
         [Test]
@@ -113,48 +112,44 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task UpdateAsync_ExistingMovie_ReturnsTrue()
+        public async Task UpdateAsync_ExistingMovie_UpdatesMovie()
         {
             var movie = new Movie { Id = 1, Title = "Old", Description = "Desc", ReleaseYear = 2000 };
             _repoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(movie);
 
             var dto = new MovieUpdateDto { Title = "New", Description = "NewDesc", ReleaseYear = 2001 };
-            var result = await _service.UpdateAsync(1, dto);
+            await _service.UpdateAsync(1, dto);
 
-            Assert.That(result, Is.True);
             Assert.That(movie.Title, Is.EqualTo("New"));
         }
 
         [Test]
-        public async Task UpdateAsync_NonExistingMovie_ReturnsFalse()
+        public void UpdateAsync_NonExistingMovie_ThrowsNotFoundException()
         {
             _repoMock.Setup(r => r.GetByIdAsync(2)).ReturnsAsync((Movie?)null);
 
             var dto = new MovieUpdateDto { Title = "New", Description = "NewDesc", ReleaseYear = 2001 };
-            var result = await _service.UpdateAsync(2, dto);
 
-            Assert.That(result, Is.False);
+            Assert.ThrowsAsync<NotFoundException>(async () => await _service.UpdateAsync(2, dto));
         }
 
         [Test]
-        public async Task DeleteAsync_ExistingMovie_ReturnsTrue()
+        public async Task DeleteAsync_ExistingMovie_CompletesSuccessfully()
         {
             var movie = new Movie { Id = 1, Title = "A", Description = "D", ReleaseYear = 2020 };
             _repoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(movie);
 
-            var result = await _service.DeleteAsync(1);
+            await _service.DeleteAsync(1);
 
-            Assert.That(result, Is.True);
+            _repoMock.Verify(r => r.DeleteAsync(movie), Times.Once);
         }
 
         [Test]
-        public async Task DeleteAsync_NonExistingMovie_ReturnsFalse()
+        public void DeleteAsync_NonExistingMovie_ThrowsNotFoundException()
         {
             _repoMock.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Movie?)null);
 
-            var result = await _service.DeleteAsync(999);
-
-            Assert.That(result, Is.False);
+            Assert.ThrowsAsync<NotFoundException>(async () => await _service.DeleteAsync(999));
         }
 
         [Test]

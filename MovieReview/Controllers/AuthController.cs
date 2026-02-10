@@ -1,4 +1,3 @@
-﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieReview.Models.DTOs;
 using MovieReview.Services;
@@ -19,22 +18,14 @@ namespace MovieReview.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);     
-            AuthResultDto result = await _authService.RegisterAsync(dto);
-            if (!result.Success)
-                return BadRequest(result.Message);
-
+            var result = await _authService.RegisterAsync(dto);
             return Ok(result);
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            AuthResultDto result = await _authService.LoginAsync(dto);
-            if (!result.Success)
-                return Unauthorized(result.Message);
-
+            var result = await _authService.LoginAsync(dto);
             return Ok(result);
         }
     }

@@ -1,8 +1,9 @@
 using Moq;
 using NUnit.Framework;
 using MovieReview.Controllers;
-using MovieReview.Services;
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
+using MovieReview.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReview.Tests
@@ -34,27 +35,12 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task Register_ReturnsBadRequest_WhenNotSuccess()
+        public void Register_ThrowsInvalidOperationException_WhenServiceThrows()
         {
             var dto = new RegisterDto { Username = "alice", Email = "alice@test.com", Password = "weak" };
-            var authResult = new AuthResultDto { Success = false, Message = "Username already exists" };
-            _serviceMock.Setup(s => s.RegisterAsync(dto)).ReturnsAsync(authResult);
+            _serviceMock.Setup(s => s.RegisterAsync(dto)).ThrowsAsync(new InvalidOperationException("Username already exists"));
 
-            var result = await _controller.Register(dto) as BadRequestObjectResult;
-
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo(authResult.Message));
-        }
-
-        [Test]
-        public async Task Register_ReturnsBadRequest_WhenModelStateInvalid()
-        {
-            var dto = new RegisterDto { Username = "alice", Email = "alice@test.com", Password = "weak" };
-            _controller.ModelState.AddModelError("Password", "Too weak");
-
-            var result = await _controller.Register(dto);
-
-            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await _controller.Register(dto));
         }
 
         [Test]
@@ -71,27 +57,12 @@ namespace MovieReview.Tests
         }
 
         [Test]
-        public async Task Login_ReturnsUnauthorized_WhenNotSuccess()
+        public void Login_ThrowsUnauthorizedException_WhenServiceThrows()
         {
             var dto = new LoginDto { Username = "alice", Password = "wrong" };
-            var authResult = new AuthResultDto { Success = false, Message = "Invalid username or password" };
-            _serviceMock.Setup(s => s.LoginAsync(dto)).ReturnsAsync(authResult);
+            _serviceMock.Setup(s => s.LoginAsync(dto)).ThrowsAsync(new UnauthorizedException("Invalid username or password"));
 
-            var result = await _controller.Login(dto) as UnauthorizedObjectResult;
-
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Value, Is.EqualTo(authResult.Message));
-        }
-
-        [Test]
-        public async Task Login_ReturnsBadRequest_WhenModelStateInvalid()
-        {
-            var dto = new LoginDto { Username = "alice", Password = "" };
-            _controller.ModelState.AddModelError("Password", "Required");
-
-            var result = await _controller.Login(dto);
-
-            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+            Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.Login(dto));
         }
     }
 }

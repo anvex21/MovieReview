@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using MovieReview.Exceptions;
 using MovieReview.Models.DTOs;
 using MovieReview.Models.Entities;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,7 +24,7 @@ namespace MovieReview.Services
         {
             User? existingUser = await _userManager.FindByNameAsync(dto.Username);
             if (existingUser is not null)
-                return new AuthResultDto { Success = false, Message = "Username already exists" };
+                throw new InvalidOperationException("Username already exists");
 
             User user = new User
             {
@@ -33,7 +34,7 @@ namespace MovieReview.Services
 
             IdentityResult result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
-                return new AuthResultDto { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
+                throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
 
             string token = GenerateJwtToken(user);
             return new AuthResultDto { Success = true, Token = token, Message = "Registration successful" };
@@ -43,11 +44,11 @@ namespace MovieReview.Services
         {
             User? user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
-                return new AuthResultDto { Success = false, Message = "Invalid username or password" };
+                throw new UnauthorizedException("Invalid username or password");
 
             bool passwordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
             if (!passwordValid)
-                return new AuthResultDto { Success = false, Message = "Invalid username or password" };
+                throw new UnauthorizedException("Invalid username or password");
 
             string token = GenerateJwtToken(user);
             return new AuthResultDto { Success = true, Token = token, Message = "Login successful" };
