@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MovieReview</title>
+  <link rel = "icon" type = "image/x-icon" href = "./logo.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -262,7 +263,10 @@
     <!-- Nav: only when logged in -->
     <nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-900/30 backdrop-blur-2xl shadow-[0_18px_60px_rgba(15,23,42,0.85)] hidden">
       <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <a href="#/movies" class="font-display font-semibold text-xl text-brand-300 tracking-tight drop-shadow-[0_0_18px_rgba(56,189,248,0.7)]">MovieReview</a>
+        <a href="#/movies" class="font-display font-semibold text-xl text-brand-300 tracking-tight drop-shadow-[0_0_18px_rgba(56,189,248,0.7)] inline-flex items-center gap-2">
+          <img src="./logo.ico" alt="MovieReview logo" class="h-12 w-12 rounded" />
+          <span>MovieReview</span>
+        </a>
         <div class="flex items-center gap-4 text-sm">
           <a href="#/movies" class="text-slate-300/80 hover:text-white transition-colors">Movies</a>
           <button id="btn-logout" type="button" class="glass-button inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-slate-50/90 text-xs font-medium tracking-wide shadow-[0_0_22px_rgba(56,189,248,0.28)] hover:bg-white/10 hover:border-brand-300/60 hover:text-white transition-colors">
