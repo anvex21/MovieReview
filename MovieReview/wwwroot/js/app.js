@@ -183,6 +183,10 @@
   // --- Movies list ---
   let sortDesc = true;
 
+  function emitMoviesState(detail) {
+    window.dispatchEvent(new CustomEvent('movies:state', { detail }));
+  }
+
   async function loadMovies() {
     const listEl = document.getElementById('movies-list');
     const emptyEl = document.getElementById('movies-empty');
@@ -195,6 +199,7 @@
     params.set('IsDescending', sortDesc ? 'true' : 'false');
     if (name) params.set('Name', name);
     if (sortBy) params.set('SortBy', sortBy);
+    emitMoviesState({ status: 'loading', movies: [], query: name, sortBy, sortDesc, error: null });
 
     emptyEl?.classList.add('hidden');
     errEl?.classList.add('hidden');
@@ -216,6 +221,7 @@
     try {
       const movies = await api('api/Movies/GetAllMoviesWithQuery?' + params.toString());
       if (!movies?.length) {
+        emitMoviesState({ status: 'loaded', movies: [], query: name, sortBy, sortDesc, error: null });
         if (emptyEl) {
           emptyEl.textContent = 'No movies found.';
           emptyEl.classList.remove('hidden');
@@ -251,12 +257,14 @@
       `
         )
         .join('');
+      emitMoviesState({ status: 'loaded', movies, query: name, sortBy, sortDesc, error: null });
     } catch (err) {
       if (err.status === 401) {
         setToken(null);
         setHash('login');
         return;
       }
+      emitMoviesState({ status: 'error', movies: [], query: name, sortBy, sortDesc, error: err.message || 'Failed to load movies' });
       if (errEl) {
         errEl.textContent = (err.data && (err.data.Message ?? err.data.message)) || err.message || 'Failed to load movies';
         errEl.classList.remove('hidden');
