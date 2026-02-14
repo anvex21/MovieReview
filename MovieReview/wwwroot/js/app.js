@@ -104,6 +104,8 @@
     if (path === 'movies') {
       showPage('movies');
       loadMovies();
+    } else if (path === 'my-reviews') {
+      showPage('my-reviews');
     } else if (path === 'movie' && id) {
       showPage('movie');
       loadMovieAndReviews(id);
